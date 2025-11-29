@@ -1,9 +1,9 @@
 import { Resolver, Query } from '@nestjs/graphql';
-import { ListingType } from './listing.type';
+import { Listing } from './entities/listing.entity';
 
-@Resolver((of) => ListingType)
+@Resolver(() => Listing)
 export class ListingResolver {
-  @Query((returns) => ListingType)
+  @Query(() => Listing)
   listing() {
     return { id: '1', title: 'test', price: 100, status: 'active' };
   }
