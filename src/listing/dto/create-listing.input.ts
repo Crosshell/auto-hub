@@ -10,25 +10,25 @@ import {
 } from 'class-validator';
 
 @InputType()
-export class CreateListingInput {
+export class createListingInput {
+  @Field()
   @MinLength(4)
   @MaxLength(50)
-  @Field()
   title: string;
 
+  @Field({ nullable: true })
   @IsOptional()
   @MinLength(10)
   @MaxLength(2048)
-  @Field({ nullable: true })
   description?: string;
 
+  @Field(() => Float)
   @IsNumber()
   @Min(100)
-  @Field(() => Float)
   price: number;
 
-  @IsEnum(ListingStatus)
+  @Field(() => ListingStatus, { nullable: true })
   @IsOptional()
-  @Field(() => ListingStatus)
+  @IsEnum(ListingStatus)
   status?: ListingStatus;
 }

@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Listing } from './entities/listing.entity';
-import { Repository } from 'typeorm';
-import { CreateListingInput } from './inputs/create-listing.input';
+import { FindManyOptions, Repository } from 'typeorm';
+import { createListingInput } from './dto/create-listing.input';
 
 @Injectable()
 export class ListingRepository {
@@ -14,10 +14,18 @@ export class ListingRepository {
     return this.listingRepository.findOne({ where: { id } });
   }
 
+  async getListings(options: FindManyOptions<Listing>): Promise<Listing[]> {
+    return this.listingRepository.find(options);
+  }
+
   async createListing(
-    createListingInput: CreateListingInput,
+    createListingInput: createListingInput,
   ): Promise<Listing> {
     const listing = this.listingRepository.create(createListingInput);
     return this.listingRepository.save(listing);
+  }
+
+  async deleteListing(id: string): Promise<void> {
+    await this.listingRepository.delete(id);
   }
 }
