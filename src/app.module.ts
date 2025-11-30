@@ -4,6 +4,9 @@ import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { ListingModule } from './listing/listing.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { AuthModule } from './auth/auth.module';
+import { RedisModule } from './redis/redis.module';
+import { UserModule } from './user/user.module';
 import config from './config/config';
 
 @Module({
@@ -30,6 +33,9 @@ import config from './config/config';
       }),
     }),
     ListingModule,
+    AuthModule,
+    RedisModule,
+    UserModule,
   ],
 })
 export class AppModule {}

@@ -1,25 +1,16 @@
 import { Field, Float, InputType } from '@nestjs/graphql';
 import { ListingStatus } from '../enums/listing-status.enum';
-import {
-  IsEnum,
-  IsNumber,
-  IsOptional,
-  MaxLength,
-  Min,
-  MinLength,
-} from 'class-validator';
+import { IsEnum, IsNumber, IsOptional, Length, Min } from 'class-validator';
 
 @InputType()
 export class createListingInput {
   @Field()
-  @MinLength(4)
-  @MaxLength(50)
+  @Length(4, 50)
   title: string;
 
   @Field({ nullable: true })
   @IsOptional()
-  @MinLength(10)
-  @MaxLength(2048)
+  @Length(10, 2048)
   description?: string;
 
   @Field(() => Float)

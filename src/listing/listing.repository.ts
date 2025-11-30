@@ -18,10 +18,8 @@ export class ListingRepository {
     return this.listingRepository.find(options);
   }
 
-  async createListing(
-    createListingInput: createListingInput,
-  ): Promise<Listing> {
-    const listing = this.listingRepository.create(createListingInput);
+  async createListing(input: createListingInput): Promise<Listing> {
+    const listing = this.listingRepository.create(input);
     return this.listingRepository.save(listing);
   }
 

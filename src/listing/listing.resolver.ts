@@ -7,28 +7,26 @@ import { ListingsArgs } from './dto/listings.args';
 
 @Resolver(() => Listing)
 export class ListingResolver {
-  constructor(private listingService: ListingService) {}
+  constructor(private service: ListingService) {}
 
   @Query(() => Listing)
   listing(@Args('id', ParseUUIDPipe) id: string): Promise<Listing> {
-    return this.listingService.getListing(id);
+    return this.service.getListing(id);
   }
 
   @Query(() => [Listing])
-  listings(@Args() listingsArgs: ListingsArgs): Promise<Listing[]> {
-    return this.listingService.getListings(listingsArgs);
+  listings(@Args() args: ListingsArgs): Promise<Listing[]> {
+    return this.service.getListings(args);
   }
 
   @Mutation(() => Listing)
-  createListing(
-    @Args('createListingInput') createListingInput: createListingInput,
-  ): Promise<Listing> {
-    return this.listingService.createListing(createListingInput);
+  createListing(@Args('input') input: createListingInput): Promise<Listing> {
+    return this.service.createListing(input);
   }
 
   @Mutation(() => Boolean)
   async deleteListing(@Args('id', ParseUUIDPipe) id: string): Promise<boolean> {
-    await this.listingService.deleteListing(id);
+    await this.service.deleteListing(id);
     return true;
   }
 }

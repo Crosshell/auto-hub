@@ -6,30 +6,28 @@ import { ListingsArgs } from './dto/listings.args';
 
 @Injectable()
 export class ListingService {
-  constructor(private listingRepository: ListingRepository) {}
+  constructor(private repository: ListingRepository) {}
 
   async getListing(id: string): Promise<Listing> {
-    const listing = await this.listingRepository.getListing(id);
+    const listing = await this.repository.getListing(id);
     if (!listing) {
       throw new NotFoundException('Listing not found');
     }
     return listing;
   }
 
-  async getListings(listingsArgs: ListingsArgs): Promise<Listing[]> {
-    const take = listingsArgs.take;
-    const skip = (listingsArgs.page - 1) * take;
+  async getListings(args: ListingsArgs): Promise<Listing[]> {
+    const take = args.take;
+    const skip = (args.page - 1) * take;
 
-    return this.listingRepository.getListings({ take, skip });
+    return this.repository.getListings({ take, skip });
   }
 
-  async createListing(
-    createListingInput: createListingInput,
-  ): Promise<Listing> {
-    return this.listingRepository.createListing(createListingInput);
+  async createListing(input: createListingInput): Promise<Listing> {
+    return this.repository.createListing(input);
   }
 
   async deleteListing(id: string): Promise<void> {
-    return this.listingRepository.deleteListing(id);
+    return this.repository.deleteListing(id);
   }
 }

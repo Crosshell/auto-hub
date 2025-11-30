@@ -11,4 +11,20 @@ export default () => ({
     db: process.env.POSTGRES_DB,
     url: process.env.DATABASE_URL,
   },
+
+  redis: {
+    host: process.env.REDIS_HOST,
+    port: process.env.REDIS_PORT,
+  },
+
+  session: {
+    secret: process.env.SESSION_SECRET,
+    cookie: {
+      maxAge:
+        process.env.SESSION_COOKIE_MAX_AGE &&
+        parseInt(process.env.SESSION_COOKIE_MAX_AGE, 10),
+      httpOnly: process.env.SESSION_COOKIE_HTTP_ONLY === 'true',
+      secure: process.env.NODE_ENV === 'production',
+    },
+  },
 });
