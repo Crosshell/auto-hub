@@ -1,10 +1,22 @@
-import { Resolver, Query } from '@nestjs/graphql';
+import { Resolver, Query, Mutation, Args } from '@nestjs/graphql';
 import { Listing } from './entities/listing.entity';
+import { ListingService } from './listing.service';
+import { CreateListingInput } from './inputs/create-listing.input';
+import { ParseUUIDPipe } from '@nestjs/common';
 
 @Resolver(() => Listing)
 export class ListingResolver {
+  constructor(private listingService: ListingService) {}
+
   @Query(() => Listing)
-  listing() {
-    return { id: '1', title: 'test', price: 100, status: 'active' };
+  listing(@Args('id', ParseUUIDPipe) id: string) {
+    return this.listingService.getListing(id);
+  }
+
+  @Mutation(() => Listing)
+  createListing(
+    @Args('createListingInput') createListingInput: CreateListingInput,
+  ): Promise<Listing> {
+    return this.listingService.createListing(createListingInput);
   }
 }

@@ -1,4 +1,10 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from 'typeorm';
 import { Field, Float, ID, ObjectType } from '@nestjs/graphql';
 import { ListingStatus } from '../enums/listing-status.enum';
 
@@ -13,6 +19,10 @@ export class Listing {
   @Field()
   title: string;
 
+  @Column({ nullable: true })
+  @Field({ nullable: true })
+  description?: string;
+
   @Column({ type: 'decimal', precision: 10, scale: 2 })
   @Field(() => Float)
   price: number;
@@ -24,4 +34,12 @@ export class Listing {
   })
   @Field(() => ListingStatus)
   status: ListingStatus;
+
+  @CreateDateColumn()
+  @Field()
+  createdAt: Date;
+
+  @UpdateDateColumn()
+  @Field()
+  updatedAt: Date;
 }
