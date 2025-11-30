@@ -5,7 +5,7 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { Field, ID, ObjectType } from '@nestjs/graphql';
+import { Field, HideField, ID, ObjectType } from '@nestjs/graphql';
 
 @Entity()
 @ObjectType()
@@ -19,6 +19,7 @@ export class User {
   email: string;
 
   @Column()
+  @HideField()
   password: string;
 
   @CreateDateColumn()

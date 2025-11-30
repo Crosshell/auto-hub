@@ -3,7 +3,7 @@ import { ListingStatus } from '../enums/listing-status.enum';
 import { IsEnum, IsNumber, IsOptional, Length, Min } from 'class-validator';
 
 @InputType()
-export class createListingInput {
+export class CreateListingInput {
   @Field()
   @Length(4, 50)
   title: string;

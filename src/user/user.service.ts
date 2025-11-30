@@ -1,24 +1,39 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { User } from './entities/user.entity';
 import { UserRepository } from './user.repository';
 import { hash } from '@common/utils';
 
 @Injectable()
 export class UserService {
-  constructor(private repository: UserRepository) {}
+  constructor(private readonly repository: UserRepository) {}
 
-  async createUser(email: string, password: string): Promise<User> {
-    const userExists = await this.getUserByEmail(email);
+  async create(email: string, password: string): Promise<User> {
+    const userExists = await this.findOneByEmail(email);
     if (userExists) {
       throw new BadRequestException('User with this email already exists');
     }
 
     const hashPassword = await hash(password);
 
-    return this.repository.createUser(email, hashPassword);
+    return this.repository.create(email, hashPassword);
   }
 
-  async getUserByEmail(email: string): Promise<User | null> {
-    return this.repository.getUserByEmail(email);
+  async findOneByEmail(email: string): Promise<User | null> {
+    return this.repository.findOneByEmail(email);
+  }
+
+  async findOneById(id: string): Promise<User | null> {
+    return this.repository.findOneById(id);
+  }
+
+  async delete(id: string): Promise<void> {
+    const result = await this.repository.delete(id);
+    if (!result.affected) {
+      throw new NotFoundException('User not found');
+    }
   }
 }

@@ -7,9 +7,9 @@ import { User } from '../user/entities/user.entity';
 
 @Injectable()
 export class AuthService {
-  constructor(private userService: UserService) {}
+  constructor(private readonly userService: UserService) {}
   async register(input: RegisterInput): Promise<User> {
-    return this.userService.createUser(input.email, input.password);
+    return this.userService.create(input.email, input.password);
   }
 
   async login(input: LoginInput): Promise<User> {
@@ -17,7 +17,7 @@ export class AuthService {
   }
 
   async validateCredentials(input: LoginInput): Promise<User> {
-    const user = await this.userService.getUserByEmail(input.email);
+    const user = await this.userService.findOneByEmail(input.email);
 
     const isValid = user && (await compare(input.password, user.password));
     if (!isValid) throw new UnauthorizedException('Invalid credentials');

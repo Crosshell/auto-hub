@@ -16,8 +16,8 @@ export const redisClientFactory: FactoryProvider<Redis> = {
       maxRetriesPerRequest: 3,
     });
 
-    redis.on('error', (err) => {
-      console.error('Redis Client Error:', err);
+    redis.on('error', (err: Error) => {
+      console.error('Redis Client Error:', err.message);
     });
 
     return redis;

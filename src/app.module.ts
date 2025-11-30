@@ -8,6 +8,7 @@ import { AuthModule } from './auth/auth.module';
 import { RedisModule } from './redis/redis.module';
 import { UserModule } from './user/user.module';
 import config from './config/config';
+import { GraphQLContext } from '@common/types/graphql-context.type';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import config from './config/config';
     GraphQLModule.forRoot<ApolloDriverConfig>({
       autoSchemaFile: true,
       driver: ApolloDriver,
+      context: ({ req, res }: GraphQLContext) => ({ req, res }),
     }),
     TypeOrmModule.forRootAsync({
       inject: [ConfigService],

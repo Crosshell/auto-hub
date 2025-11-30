@@ -3,7 +3,7 @@ import { AppModule } from './app.module';
 import { ConfigService } from '@nestjs/config';
 import { ValidationPipe } from '@nestjs/common';
 import session from 'express-session';
-import { RedisStore } from 'connect-redis';
+import RedisStore from 'connect-redis';
 import { RedisService } from './redis/redis.service';
 
 async function bootstrap() {
@@ -13,6 +13,11 @@ async function bootstrap() {
   const port = configService.getOrThrow<number>('port');
 
   const redisService = app.get(RedisService);
+
+  app.enableCors({
+    origin: true,
+    credentials: true,
+  });
 
   app.use(
     session({
