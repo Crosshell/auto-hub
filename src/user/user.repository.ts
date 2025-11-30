@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './entities/user.entity';
 import { DeleteResult, Repository } from 'typeorm';
+import { UpdateUserInput } from './dto/update-user.input';
 
 @Injectable()
 export class UserRepository {
@@ -20,6 +21,11 @@ export class UserRepository {
 
   async findOneById(id: string): Promise<User | null> {
     return this.userRepository.findOne({ where: { id } });
+  }
+
+  async update(user: User, input: UpdateUserInput): Promise<User> {
+    this.userRepository.merge(user, input);
+    return this.userRepository.save(user);
   }
 
   async delete(id: string): Promise<DeleteResult> {

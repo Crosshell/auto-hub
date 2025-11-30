@@ -22,6 +22,18 @@ export class User {
   @HideField()
   password: string;
 
+  @Column({ nullable: true })
+  @Field({ nullable: true })
+  phone?: string;
+
+  @Column({ nullable: true })
+  @Field({ nullable: true })
+  firstName?: string;
+
+  @Column({ nullable: true })
+  @Field({ nullable: true })
+  lastName?: string;
+
   @CreateDateColumn()
   @Field()
   createdAt: Date;

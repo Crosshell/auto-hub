@@ -6,6 +6,7 @@ import {
 import { User } from './entities/user.entity';
 import { UserRepository } from './user.repository';
 import { hash } from '@common/utils';
+import { UpdateUserInput } from './dto/update-user.input';
 
 @Injectable()
 export class UserService {
@@ -28,6 +29,16 @@ export class UserService {
 
   async findOneById(id: string): Promise<User | null> {
     return this.repository.findOneById(id);
+  }
+
+  async update(id: string, input: UpdateUserInput): Promise<User> {
+    const user = await this.repository.findOneById(id);
+
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
+    return this.repository.update(user, input);
   }
 
   async delete(id: string): Promise<void> {
