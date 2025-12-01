@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
-import { GenerationResolver } from './resolvers/generation.resolver';
-import { MakeResolver } from './resolvers/make.resolver';
-import { ModelResolver } from './resolvers/model.resolver';
-import { ModificationResolver } from './resolvers/modification.resolver';
+import { GenerationResolver } from './car-generation/generation.resolver';
+import { MakeResolver } from './car-make/make.resolver';
+import { ModelResolver } from './car-model/model.resolver';
+import { ModificationResolver } from './car-modification/modification.resolver';
 
 @Module({
   providers: [

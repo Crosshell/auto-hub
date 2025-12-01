@@ -3,10 +3,10 @@ import { BodyType } from '../enums/body-type.enum';
 import { FuelType } from '../enums/fuel-type.enum';
 import { TransmissionType } from '../enums/transmission-type.enum';
 import { DriveType } from '../enums/drive-type.enum';
-import { CarMakeEntity } from '../../car-catalog/entities/car-make.entity';
-import { CarModelEntity } from '../../car-catalog/entities/car-model.entity';
-import { CarGenerationEntity } from '../../car-catalog/entities/car-generation.entity';
-import { CarModificationEntity } from '../../car-catalog/entities/car-modification.entity';
+import { CarMakeEntity } from '../../car-catalog/car-make/entities/car-make.entity';
+import { CarModelEntity } from '../../car-catalog/car-model/entities/car-model.entity';
+import { CarGenerationEntity } from '../../car-catalog/car-generation/entities/car-generation.entity';
+import { CarModificationEntity } from '../../car-catalog/car-modification/entities/car-modification.entity';
 
 @Entity({ name: 'cars' })
 export class CarEntity {

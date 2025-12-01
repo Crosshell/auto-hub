@@ -5,8 +5,8 @@ import {
   OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { CarModificationEntity } from './car-modification.entity';
-import { CarModelEntity } from './car-model.entity';
+import { CarModificationEntity } from '../../car-modification/entities/car-modification.entity';
+import { CarModelEntity } from '../../car-model/entities/car-model.entity';
 
 @Entity({ name: 'car_generations' })
 export class CarGenerationEntity {
