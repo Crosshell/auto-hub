@@ -20,5 +20,6 @@ import { RegistrationResolver } from './registration/registration.resolver';
     RegistrationService,
     RegistrationResolver,
   ],
+  exports: [SessionGuard, TypeOrmModule.forFeature([UserEntity])],
 })
 export class AuthModule {}

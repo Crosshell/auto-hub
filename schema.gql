@@ -2,6 +2,63 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+enum BodyType {
+  BUGGY
+  CABRIOLET
+  COUPE
+  FASTBACK
+  HATCHBACK
+  LIMOUSINE
+  PICKUP
+  SEDAN
+  SUV
+  VAN
+}
+
+type CarGenerationModel {
+  id: ID!
+  model: CarModelModel!
+  modifications: [CarModificationModel!]!
+  name: String!
+}
+
+type CarMakeModel {
+  id: ID!
+  models: [CarModelModel!]!
+  name: String!
+}
+
+type CarModel {
+  bodyType: BodyType!
+  color: String
+  driveType: DriveType!
+  fuelType: FuelType!
+  generation: CarGenerationModel!
+  id: ID!
+  make: CarMakeModel!
+  mileage: Float!
+  model: CarModelModel!
+  modification: CarModificationModel!
+  transmission: TransmissionType!
+  vin: String!
+  year: Float!
+}
+
+type CarModelModel {
+  generations: [CarGenerationModel!]!
+  id: ID!
+  make: CarMakeModel!
+  name: String!
+}
+
+type CarModificationModel {
+  description: String
+  engine: String!
+  generation: CarGenerationModel!
+  horsepower: Float!
+  id: ID!
+}
+
 input ChangeEmailInput {
   newEmail: String!
 }
@@ -11,10 +68,89 @@ input ChangePasswordInput {
   oldPassword: String!
 }
 
+type CityModel {
+  id: ID!
+  listings: [ListingModel!]!
+  name: String!
+  region: RegionModel!
+}
+
+type CountryModel {
+  code: String!
+  id: ID!
+  name: String!
+  region: RegionModel!
+}
+
+input CreateCarInput {
+  bodyType: BodyType!
+  color: String
+  driveType: DriveType!
+  fuelType: FuelType!
+  generationId: ID!
+  makeId: ID!
+  mileage: Float!
+  modelId: ID!
+  modificationId: ID!
+  transmission: TransmissionType!
+  vin: String!
+  year: Float!
+}
+
+input CreateListingInput {
+  car: CreateCarInput!
+  cityId: ID!
+  description: String
+  price: Float!
+  status: ListingStatus! = ACTIVE
+  title: String!
+}
+
 """
 A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
 """
 scalar DateTime
+
+enum DriveType {
+  AWD
+  FWD
+  RWD
+}
+
+enum FuelType {
+  DIESEL
+  ELECTRIC
+  GASOLINE
+  HYBRID
+  PETROL
+}
+
+type ListingModel {
+  car: CarModel!
+  city: CityModel!
+  createdAt: DateTime!
+  description: String
+  id: ID!
+  owner: UserModel!
+  photos: [ListingPhotoModel!]!
+  price: Float!
+  status: ListingStatus!
+  title: String!
+  updatedAt: DateTime!
+}
+
+type ListingPhotoModel {
+  id: ID!
+  listing: ListingModel!
+  order: Float!
+  url: String!
+}
+
+enum ListingStatus {
+  ACTIVE
+  ARCHIVED
+  SOLD
+}
 
 input LoginInput {
   login: String!
@@ -24,6 +160,7 @@ input LoginInput {
 type Mutation {
   changeEmail(input: ChangeEmailInput!): Boolean!
   changePassword(input: ChangePasswordInput!): Boolean!
+  createListing(input: CreateListingInput!): ListingModel!
   login(input: LoginInput!): UserModel!
   logout: Boolean!
   register(input: RegisterInput!): Boolean!
@@ -33,13 +170,30 @@ type Mutation {
 }
 
 type Query {
+  cities(regionId: String!): [CityModel!]!
+  countries: [CountryModel!]!
   me: UserModel!
+  regions(countryId: String!): [RegionModel!]!
+}
+
+type RegionModel {
+  cities: [CityModel!]!
+  country: CountryModel!
+  id: ID!
+  name: String!
 }
 
 input RegisterInput {
   email: String!
   password: String!
   username: String!
+}
+
+enum TransmissionType {
+  AUTOMATIC
+  CVT
+  DSG
+  MANUAL
 }
 
 input UpdateProfileInput {

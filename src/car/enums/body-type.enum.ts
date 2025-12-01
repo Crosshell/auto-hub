@@ -1,3 +1,5 @@
+import { registerEnumType } from '@nestjs/graphql';
+
 export enum BodyType {
   BUGGY,
   CABRIOLET,
@@ -10,3 +12,7 @@ export enum BodyType {
   SUV,
   PICKUP,
 }
+
+registerEnumType(BodyType, {
+  name: 'BodyType',
+});
