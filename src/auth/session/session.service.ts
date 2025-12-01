@@ -4,42 +4,36 @@ import {
   NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
-import { LoginInput } from './inputs/login.input';
-import { InjectRepository } from '@nestjs/typeorm';
-import { UserEntity } from '../account/entities/user.entity';
-import { Repository } from 'typeorm';
+import { LoginInput } from './dto/login.input';
+import { UserEntity } from '../user/entities/user.entity';
 import { verify } from 'argon2';
 import type { Request } from 'express';
 import { ConfigService } from '@nestjs/config';
+import { UserService } from '../user/user.service';
 
 @Injectable()
 export class SessionService {
   constructor(
-    @InjectRepository(UserEntity)
-    private readonly userRepository: Repository<UserEntity>,
+    private readonly userService: UserService,
     private readonly configService: ConfigService,
   ) {}
 
   async login(req: Request, input: LoginInput): Promise<UserEntity> {
     const { login, password } = input;
 
-    const user = await this.userRepository.findOne({
-      where: [{ username: login }, { email: login }],
-    });
-
+    const user = await this.userService.findByLogin(login);
     if (!user) {
       throw new NotFoundException('User not found');
     }
 
     const isValidPassword = await verify(user.password, password);
-
     if (!isValidPassword) {
       throw new UnauthorizedException('Invalid password');
     }
 
-    return new Promise((resolve, reject) => {
-      req.session.createdAt = new Date();
+    return await new Promise<UserEntity>((resolve, reject) => {
       req.session.userId = user.id;
+      req.session.createdAt = new Date().toISOString();
 
       req.session.save((err) => {
         if (err) {
@@ -54,7 +48,7 @@ export class SessionService {
   }
 
   async logout(req: Request): Promise<boolean> {
-    return new Promise((resolve, reject) => {
+    return await new Promise<boolean>((resolve, reject) => {
       req.session.destroy((err) => {
         if (err) {
           return reject(
@@ -62,9 +56,10 @@ export class SessionService {
           );
         }
 
-        req.res?.clearCookie(
-          this.configService.getOrThrow<string>('SESSION_NAME'),
-        );
+        const sessionName =
+          this.configService.getOrThrow<string>('SESSION_NAME');
+
+        req.res?.clearCookie(sessionName);
         resolve(true);
       });
     });

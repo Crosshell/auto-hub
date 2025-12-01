@@ -1,37 +1,41 @@
 import { ConflictException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { CreateUserInput } from './inputs/create-user.input';
+import { CreateUserInput } from './dto/create-user.input';
 import { UserEntity } from './entities/user.entity';
 import { hash } from 'argon2';
 
 @Injectable()
-export class AccountService {
+export class UserService {
   constructor(
     @InjectRepository(UserEntity)
     readonly userRepository: Repository<UserEntity>,
   ) {}
 
-  async me(id: string): Promise<UserEntity | null> {
-    return await this.userRepository.findOne({ where: { id } });
+  async findById(id: string): Promise<UserEntity | null> {
+    return this.userRepository.findOne({ where: { id } });
   }
 
-  async create(input: CreateUserInput): Promise<boolean> {
+  async findByLogin(login: string): Promise<UserEntity | null> {
+    return this.userRepository.findOne({
+      where: [{ username: login }, { email: login }],
+    });
+  }
+
+  async create(input: CreateUserInput): Promise<UserEntity> {
     const { username, email, password } = input;
 
-    const isUsernameExists = await this.userRepository.findOne({
+    const existingByUsername = await this.userRepository.findOne({
       where: { username },
     });
-
-    if (isUsernameExists) {
+    if (existingByUsername) {
       throw new ConflictException('Username already exists');
     }
 
-    const isEmailExists = await this.userRepository.findOne({
+    const existingByEmail = await this.userRepository.findOne({
       where: { email },
     });
-
-    if (isEmailExists) {
+    if (existingByEmail) {
       throw new ConflictException('Email already exists');
     }
 
@@ -41,8 +45,6 @@ export class AccountService {
       password: await hash(password),
     });
 
-    await this.userRepository.save(user);
-
-    return true;
+    return this.userRepository.save(user);
   }
 }

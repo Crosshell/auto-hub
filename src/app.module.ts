@@ -7,8 +7,7 @@ import { RedisModule } from './redis/redis.module';
 import { IS_DEV_ENV } from './shared/utils/is-dev.util';
 import { getGraphQLConfig } from './config/graphql.config';
 import { getTypeOrmConfig } from './config/typeorm.config';
-import { AccountModule } from './auth/account/account.module';
-import { SessionModule } from './auth/session/session.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -26,8 +25,7 @@ import { SessionModule } from './auth/session/session.module';
       useFactory: getTypeOrmConfig,
       inject: [ConfigService],
     }),
-    AccountModule,
-    SessionModule,
+    AuthModule,
     RedisModule,
   ],
 })

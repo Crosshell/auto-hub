@@ -19,13 +19,13 @@ input LoginInput {
 }
 
 type Mutation {
-  createUser(input: CreateUserInput!): Boolean!
+  createUser(input: CreateUserInput!): UserModel!
   login(input: LoginInput!): UserModel!
   logout: Boolean!
 }
 
 type Query {
-  findAccount: UserModel!
+  me: UserModel!
 }
 
 type UserModel {
@@ -33,7 +33,6 @@ type UserModel {
   createdAt: DateTime!
   email: String!
   id: ID!
-  password: String!
   updatedAt: DateTime!
   username: String!
 }
