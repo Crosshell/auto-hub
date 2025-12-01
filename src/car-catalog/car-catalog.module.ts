@@ -1,15 +1,17 @@
 import { Module } from '@nestjs/common';
-import { GenerationResolver } from './car-generation/generation.resolver';
-import { MakeResolver } from './car-make/make.resolver';
-import { ModelResolver } from './car-model/model.resolver';
-import { ModificationResolver } from './car-modification/modification.resolver';
+import { CarGenerationResolver } from './car-generation/car-generation.resolver';
+import { CarMakeResolver } from './car-make/car-make.resolver';
+import { CarModelResolver } from './car-model/car-model.resolver';
+import { CarModificationResolver } from './car-modification/car-modification.resolver';
+import { CarMakeService } from './car-make/car-make.service';
 
 @Module({
   providers: [
-    GenerationResolver,
-    MakeResolver,
-    ModelResolver,
-    ModificationResolver,
+    CarGenerationResolver,
+    CarMakeResolver,
+    CarModelResolver,
+    CarModificationResolver,
+    CarMakeService,
   ],
 })
 export class CarCatalogModule {}
