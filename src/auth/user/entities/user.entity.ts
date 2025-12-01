@@ -2,9 +2,11 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { ListingEntity } from '../../../listing/entities/listing.entity';
 
 @Entity({ name: 'users' })
 export class UserEntity {
@@ -23,8 +25,14 @@ export class UserEntity {
   @Column({ nullable: true })
   avatar?: string;
 
+  @Column({ nullable: true })
+  phone?: string;
+
   @Column({ default: false })
   isEmailVerified: boolean;
+
+  @OneToMany(() => ListingEntity, (listing) => listing.owner)
+  listings: ListingEntity[];
 
   @CreateDateColumn()
   createdAt: Date;

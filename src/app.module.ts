@@ -9,6 +9,10 @@ import { getGraphQLConfig } from './config/graphql.config';
 import { getTypeOrmConfig } from './config/typeorm.config';
 import { AuthModule } from './auth/auth.module';
 import { EmailModule } from './email/email.module';
+import { ListingModule } from './listing/listing.module';
+import { CarModule } from './car/car.module';
+import { CarCatalogModule } from './car-catalog/car-catalog.module';
+import { LocationModule } from './location/location.module';
 
 @Module({
   imports: [
@@ -29,6 +33,10 @@ import { EmailModule } from './email/email.module';
     AuthModule,
     RedisModule,
     EmailModule,
+    ListingModule,
+    CarModule,
+    CarCatalogModule,
+    LocationModule,
   ],
 })
 export class AppModule {}

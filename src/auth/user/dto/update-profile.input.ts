@@ -12,4 +12,9 @@ export class UpdateProfileInput {
   @IsOptional()
   @IsString()
   avatar?: string;
+
+  @Field({ nullable: true })
+  @IsOptional()
+  @IsString()
+  phone?: string;
 }

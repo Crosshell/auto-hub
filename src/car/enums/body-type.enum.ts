@@ -1,0 +1,12 @@
+export enum BodyType {
+  BUGGY,
+  CABRIOLET,
+  COUPE,
+  FASTBACK,
+  HATCHBACK,
+  SEDAN,
+  LIMOUSINE,
+  VAN,
+  SUV,
+  PICKUP,
+}
