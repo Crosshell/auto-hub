@@ -5,13 +5,13 @@ import { ValidationPipe } from '@nestjs/common';
 import session from 'express-session';
 import RedisStore from 'connect-redis';
 import { RedisService } from './redis/redis.service';
+import cookieParser from 'cookie-parser';
+import { parseBoolean } from '@common/utils/parse-boolean.util';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
   const configService = app.get(ConfigService);
-  const port = configService.getOrThrow<number>('port');
-
   const redisService = app.get(RedisService);
 
   app.enableCors({
@@ -21,18 +21,35 @@ async function bootstrap() {
 
   app.use(
     session({
-      store: new RedisStore({
-        client: redisService.getClient(),
-        prefix: 'session:',
-      }),
-      secret: configService.getOrThrow<string>('session.secret'),
+      secret: configService.getOrThrow<string>('SESSION_SECRET'),
+      name: configService.getOrThrow<string>('SESSION_NAME'),
       resave: false,
       saveUninitialized: false,
-      cookie: configService.getOrThrow('session.cookie'),
+      cookie: {
+        maxAge: parseInt(
+          configService.getOrThrow<string>('SESSION_MAX_AGE'),
+          10,
+        ),
+        httpOnly: parseBoolean(
+          configService.getOrThrow<string>('SESSION_HTTP_ONLY'),
+        ),
+        secure: parseBoolean(
+          configService.getOrThrow<string>('SESSION_SECURE'),
+        ),
+        sameSite: 'lax',
+      },
+      store: new RedisStore({
+        client: redisService,
+        prefix: configService.getOrThrow<string>('SESSION_FOLDER'),
+      }),
     }),
   );
 
-  app.useGlobalPipes(new ValidationPipe());
+  app.use(cookieParser(configService.getOrThrow<string>('COOKIES_SECRET')));
+
+  app.useGlobalPipes(new ValidationPipe({ transform: true }));
+
+  const port = configService.getOrThrow<number>('APP_PORT');
   await app.listen(port);
 }
 bootstrap();
