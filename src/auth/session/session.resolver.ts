@@ -1,7 +1,7 @@
-import { Args, Context, Mutation, Resolver, Query } from '@nestjs/graphql';
+import { Args, Context, Mutation, Resolver } from '@nestjs/graphql';
 import { SessionService } from './session.service';
 import { UserModel } from '../account/models/user.model';
-import type { GqlContext } from '@common/types/gql-context.type';
+import type { GqlContext } from '../../shared/types/gql-context.type';
 import { LoginInput } from './inputs/login.input';
 import { UserEntity } from '../account/entities/user.entity';
 
@@ -20,10 +20,5 @@ export class SessionResolver {
   @Mutation(() => Boolean, { name: 'logout' })
   async logout(@Context() { req }: GqlContext): Promise<boolean> {
     return this.sessionService.logout(req);
-  }
-
-  @Query(() => UserModel, { name: 'me' })
-  me() {
-    return new UserEntity();
   }
 }

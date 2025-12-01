@@ -12,6 +12,10 @@ export class AccountService {
     readonly userRepository: Repository<UserEntity>,
   ) {}
 
+  async me(id: string): Promise<UserEntity | null> {
+    return await this.userRepository.findOne({ where: { id } });
+  }
+
   async create(input: CreateUserInput): Promise<boolean> {
     const { username, email, password } = input;
 

@@ -25,7 +25,7 @@ type Mutation {
 }
 
 type Query {
-  me: UserModel!
+  findAccount: UserModel!
 }
 
 type UserModel {

@@ -20,10 +20,6 @@
     "forceConsistentCasingInFileNames": true,
     "noImplicitAny": false,
     "strictBindCallApply": false,
-    "noFallthroughCasesInSwitch": false,
-    "paths": {
-      "@common/*": ["src/common/*"]
-    }
-  },
-  "include": ["src/**/*", "src/common/types/**/*.d.ts"]
+    "noFallthroughCasesInSwitch": false
+  }
 }
