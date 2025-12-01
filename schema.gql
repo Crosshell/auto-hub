@@ -2,10 +2,13 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
-input CreateUserInput {
-  email: String!
-  password: String!
-  username: String!
+input ChangeEmailInput {
+  newEmail: String!
+}
+
+input ChangePasswordInput {
+  newPassword: String!
+  oldPassword: String!
 }
 
 """
@@ -19,13 +22,29 @@ input LoginInput {
 }
 
 type Mutation {
-  createUser(input: CreateUserInput!): UserModel!
+  changeEmail(input: ChangeEmailInput!): Boolean!
+  changePassword(input: ChangePasswordInput!): Boolean!
   login(input: LoginInput!): UserModel!
   logout: Boolean!
+  register(input: RegisterInput!): Boolean!
+  updateProfile(input: UpdateProfileInput!): UserModel!
+  verifyEmail(token: String!): Boolean!
+  verifyNewEmail(token: String!): Boolean!
 }
 
 type Query {
   me: UserModel!
+}
+
+input RegisterInput {
+  email: String!
+  password: String!
+  username: String!
+}
+
+input UpdateProfileInput {
+  avatar: String
+  username: String
 }
 
 type UserModel {
@@ -33,6 +52,7 @@ type UserModel {
   createdAt: DateTime!
   email: String!
   id: ID!
+  isEmailVerified: Boolean!
   updatedAt: DateTime!
   username: String!
 }

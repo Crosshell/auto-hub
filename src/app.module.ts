@@ -8,6 +8,7 @@ import { IS_DEV_ENV } from './shared/utils/is-dev.util';
 import { getGraphQLConfig } from './config/graphql.config';
 import { getTypeOrmConfig } from './config/typeorm.config';
 import { AuthModule } from './auth/auth.module';
+import { EmailModule } from './email/email.module';
 
 @Module({
   imports: [
@@ -27,6 +28,7 @@ import { AuthModule } from './auth/auth.module';
     }),
     AuthModule,
     RedisModule,
+    EmailModule,
   ],
 })
 export class AppModule {}

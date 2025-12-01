@@ -36,10 +36,22 @@ services:
     networks:
       - auto-hub-network
 
+  redis-insight:
+    image: redis/redisinsight:latest
+    ports:
+      - "5540:5540"
+    depends_on:
+      - redis
+    volumes:
+      - redis_insight:/data
+    networks:
+      - auto-hub-network
+
 
 volumes:
   postgres:
   redis:
+  redis_insight:
 
 networks:
   auto-hub-network:

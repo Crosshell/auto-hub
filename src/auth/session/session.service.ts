@@ -25,6 +25,10 @@ export class SessionService {
     if (!user) {
       throw new NotFoundException('User not found');
     }
+    const { isEmailVerified } = user;
+    if (!isEmailVerified) {
+      throw new UnauthorizedException('Email not verified');
+    }
 
     const isValidPassword = await verify(user.password, password);
     if (!isValidPassword) {

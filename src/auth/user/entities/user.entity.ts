@@ -23,6 +23,9 @@ export class UserEntity {
   @Column({ nullable: true })
   avatar?: string;
 
+  @Column({ default: false })
+  isEmailVerified: boolean;
+
   @CreateDateColumn()
   createdAt: Date;
 

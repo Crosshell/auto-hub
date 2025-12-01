@@ -14,6 +14,9 @@ export class UserModel {
   @Field(() => String, { nullable: true })
   avatar?: string;
 
+  @Field(() => Boolean)
+  isEmailVerified: boolean;
+
   @Field(() => Date)
   createdAt: Date;
 
