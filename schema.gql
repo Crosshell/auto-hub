@@ -44,6 +44,7 @@ type CarMake {
 type CarModel {
   id: ID!
   make: CarMake!
+  makeId: String!
   name: String!
 }
 
@@ -75,6 +76,11 @@ input CreateCarInput {
   year: Int!
 }
 
+input CreateCarMakeInput {
+  models: [CreateNestedCarModelInput!]!
+  name: String!
+}
+
 input CreateListingInput {
   car: CreateCarInput!
   description: String
@@ -82,6 +88,10 @@ input CreateListingInput {
   price: Float!
   status: ListingStatus! = ACTIVE
   title: String!
+}
+
+input CreateNestedCarModelInput {
+  name: String!
 }
 
 """
@@ -130,6 +140,7 @@ input LoginInput {
 type Mutation {
   changeEmail(input: ChangeEmailInput!): Boolean!
   changePassword(input: ChangePasswordInput!): Boolean!
+  createCarMake(input: CreateCarMakeInput!): CarMake!
   createListing(input: CreateListingInput!): Listing!
   login(input: LoginInput!): User!
   logout: Boolean!

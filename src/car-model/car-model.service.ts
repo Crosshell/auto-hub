@@ -7,6 +7,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { CarModel } from './entities/car.model.entity';
 import { Repository } from 'typeorm';
 import { CarMake } from '../car-make/entities/car-make.entity';
+import { CreateCarModelInput } from './dto/create-car-model.input';
 
 @Injectable()
 export class CarModelService {
@@ -14,6 +15,13 @@ export class CarModelService {
     @InjectRepository(CarModel)
     private readonly carModelRepository: Repository<CarModel>,
   ) {}
+
+  async createMany(input: CreateCarModelInput[]): Promise<CarModel[]> {
+    const carModels = input.map((model) =>
+      this.carModelRepository.create(model),
+    );
+    return this.carModelRepository.save(carModels);
+  }
 
   async findByCarMakeId(makeId: string): Promise<CarModel[]> {
     return this.carModelRepository.find({ where: { make: { id: makeId } } });

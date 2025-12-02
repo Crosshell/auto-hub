@@ -20,6 +20,7 @@ export class CarModel {
   name: string;
 
   @Column()
+  @Field()
   makeId: string;
 
   @ManyToOne(() => CarMake, (make) => make.models, { cascade: true })
