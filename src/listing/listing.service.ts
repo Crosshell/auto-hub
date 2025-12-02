@@ -1,9 +1,10 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateListingInput } from './dto/create-listing.input';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Listing } from './entities/listing.entity';
 import { Repository } from 'typeorm';
 import { CarService } from '../car/car.service';
+import { UpdateListingInput } from './dto/update-listing.input';
 
 @Injectable()
 export class ListingService {
@@ -40,5 +41,25 @@ export class ListingService {
 
   async findByUserId(userId: string): Promise<Listing[]> {
     return this.listingRepository.find({ where: { owner: { id: userId } } });
+  }
+
+  async update(id: string, input: UpdateListingInput): Promise<Listing> {
+    const listing = await this.listingRepository.findOne({
+      where: { id },
+      relations: ['car'],
+    });
+
+    if (!listing) throw new NotFoundException('Listing not found');
+
+    if (input.car) {
+      listing.car = await this.carService.update(listing.car.id, input.car);
+    }
+
+    Object.assign(listing, {
+      ...input,
+      car: undefined,
+    });
+
+    return this.listingRepository.save(listing);
   }
 }

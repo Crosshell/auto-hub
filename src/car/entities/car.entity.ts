@@ -1,10 +1,4 @@
-import {
-  Column,
-  Entity,
-  ManyToOne,
-  PrimaryGeneratedColumn,
-  JoinColumn,
-} from 'typeorm';
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { Field, Float, ID, Int, ObjectType } from '@nestjs/graphql';
 import { CarMake } from '../../car-make/entities/car-make.entity';
 import { CarModel } from '../../car-model/entities/car.model.entity';
@@ -21,12 +15,10 @@ export class Car {
   id: string;
 
   @ManyToOne(() => CarMake, { eager: true })
-  @JoinColumn({ name: 'makeId' })
   @Field(() => CarMake)
   make: CarMake;
 
   @ManyToOne(() => CarModel, { eager: true })
-  @JoinColumn({ name: 'modelId' })
   @Field(() => CarModel)
   model: CarModel;
 

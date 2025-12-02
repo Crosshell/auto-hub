@@ -15,6 +15,8 @@ import { User } from '../auth/user/entities/user.entity';
 import { UserService } from '../auth/user/user.service';
 import { Car } from '../car/entities/car.entity';
 import { CarService } from '../car/car.service';
+import { UpdateListingInput } from './dto/update-listing.input';
+import { ParseUUIDPipe } from '@nestjs/common';
 
 @Resolver(() => Listing)
 export class ListingResolver {
@@ -26,11 +28,20 @@ export class ListingResolver {
 
   @Authorization()
   @Mutation(() => Listing)
-  createListing(
+  async createListing(
     @Args('input') input: CreateListingInput,
     @CurrentUser('id') userId: string,
   ): Promise<Listing> {
     return this.listingService.create(input, userId);
+  }
+
+  @Authorization()
+  @Mutation(() => Listing)
+  async updateListing(
+    @Args('id', ParseUUIDPipe) id: string,
+    @Args('input') input: UpdateListingInput,
+  ): Promise<Listing> {
+    return this.listingService.update(id, input);
   }
 
   @Query(() => [Listing])

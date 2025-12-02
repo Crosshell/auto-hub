@@ -134,6 +134,7 @@ type Mutation {
   login(input: LoginInput!): User!
   logout: Boolean!
   register(input: RegisterInput!): Boolean!
+  updateListing(id: String!, input: UpdateListingInput!): Listing!
   updateProfile(input: UpdateProfileInput!): User!
   verifyEmail(token: String!): Boolean!
   verifyNewEmail(token: String!): Boolean!
@@ -159,6 +160,34 @@ enum TransmissionType {
   CVT
   DSG
   MANUAL
+}
+
+input UpdateCarInput {
+  bodyType: BodyType
+  color: String
+  doors: Int
+  driveType: DriveType
+  engineVolume: Float
+  fuelConsumption: Float
+  fuelType: FuelType
+  horsePower: Int
+  makeId: ID
+  mileage: Int
+  modelId: ID
+  modification: String
+  seats: Int
+  transmission: TransmissionType
+  vin: String
+  year: Int
+}
+
+input UpdateListingInput {
+  car: UpdateCarInput
+  description: String
+  location: String
+  price: Float
+  status: ListingStatus = ACTIVE
+  title: String
 }
 
 input UpdateProfileInput {

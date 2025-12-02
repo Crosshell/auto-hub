@@ -6,9 +6,9 @@ import {
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Car } from './entities/car.entity';
-import { CarMake } from '../car-make/entities/car-make.entity';
-import { CarModel } from '../car-model/entities/car.model.entity';
 import { CreateCarInput } from './dto/create-car.input';
+import { UpdateCarInput } from './dto/update-car.input';
+import { CarModelService } from '../car-model/car-model.service';
 
 @Injectable()
 export class CarService {
@@ -16,38 +16,20 @@ export class CarService {
     @InjectRepository(Car)
     private carRepository: Repository<Car>,
 
-    @InjectRepository(CarMake)
-    private makeRepository: Repository<CarMake>,
-
-    @InjectRepository(CarModel)
-    private modelRepository: Repository<CarModel>,
+    private readonly carModelService: CarModelService,
   ) {}
 
   async create(input: CreateCarInput): Promise<Car> {
-    const make = await this.makeRepository.findOne({
-      where: { id: input.makeId },
-      relations: ['models'],
-    });
-
-    if (!make) throw new NotFoundException('Make not found');
-
-    const model = await this.modelRepository.findOne({
-      where: { id: input.modelId },
-      relations: ['make'],
-    });
-
-    if (!model) throw new NotFoundException('Model not found');
-
-    if (model.make.id !== make.id) {
-      throw new BadRequestException('This model does not belong to this make');
-    }
+    const { make, model } = await this.carModelService.resolveMakeModel(
+      input.modelId,
+      input.makeId,
+    );
 
     const car = this.carRepository.create({
       ...input,
       make,
       model,
     });
-
     return this.carRepository.save(car);
   }
 
@@ -55,5 +37,32 @@ export class CarService {
     const car = await this.carRepository.findOne({ where: { id } });
     if (!car) throw new NotFoundException('Car not found');
     return car;
+  }
+
+  async update(id: string, input: UpdateCarInput): Promise<Car> {
+    const car = await this.findOneById(id);
+    const preloadData = { ...car, ...input };
+
+    if (input.makeId || input.modelId) {
+      if (!input.makeId || !input.modelId) {
+        throw new BadRequestException(
+          'To change make/model you must provide both makeId and modelId',
+        );
+      }
+
+      const { make, model } = await this.carModelService.resolveMakeModel(
+        input.modelId,
+        input.makeId,
+      );
+
+      preloadData.make = make;
+      preloadData.model = model;
+    }
+
+    const updatedCar = await this.carRepository.preload(preloadData);
+
+    if (!updatedCar) throw new NotFoundException('Car not found');
+
+    return this.carRepository.save(updatedCar);
   }
 }
