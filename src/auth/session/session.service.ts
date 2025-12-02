@@ -5,7 +5,7 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { LoginInput } from './dto/login.input';
-import { UserEntity } from '../user/entities/user.entity';
+import { User } from '../user/entities/user.entity';
 import { verify } from 'argon2';
 import type { Request } from 'express';
 import { ConfigService } from '@nestjs/config';
@@ -18,7 +18,7 @@ export class SessionService {
     private readonly configService: ConfigService,
   ) {}
 
-  async login(req: Request, input: LoginInput): Promise<UserEntity> {
+  async login(req: Request, input: LoginInput): Promise<User> {
     const { login, password } = input;
 
     const user = await this.userService.findByLogin(login);
@@ -35,7 +35,7 @@ export class SessionService {
       throw new UnauthorizedException('Invalid password');
     }
 
-    return await new Promise<UserEntity>((resolve, reject) => {
+    return await new Promise<User>((resolve, reject) => {
       req.session.userId = user.id;
       req.session.createdAt = new Date().toISOString();
 

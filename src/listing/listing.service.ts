@@ -1,31 +1,19 @@
-import {
-  Injectable,
-  InternalServerErrorException,
-  NotFoundException,
-} from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { CreateListingInput } from './dto/create-listing.input';
 import { InjectRepository } from '@nestjs/typeorm';
-import { ListingEntity } from './entities/listing.entity';
+import { Listing } from './entities/listing.entity';
 import { Repository } from 'typeorm';
 import { CarService } from '../car/car.service';
-import { CityService } from '../location/city/city.service';
 
 @Injectable()
 export class ListingService {
   constructor(
-    @InjectRepository(ListingEntity)
-    private readonly listingRepository: Repository<ListingEntity>,
-    private readonly cityService: CityService,
+    @InjectRepository(Listing)
+    private readonly listingRepository: Repository<Listing>,
     private readonly carService: CarService,
   ) {}
 
-  async create(
-    input: CreateListingInput,
-    userId: string,
-  ): Promise<ListingEntity> {
-    const city = await this.cityService.findById(input.cityId);
-    if (!city) throw new NotFoundException('City not found');
-
+  async create(input: CreateListingInput, userId: string): Promise<Listing> {
     const car = await this.carService.create(input.car);
 
     const listing = this.listingRepository.create({
@@ -33,20 +21,24 @@ export class ListingService {
       description: input.description,
       price: input.price,
       owner: { id: userId },
-      city,
+      location: input.location,
       car,
     });
 
-    await this.listingRepository.save(listing);
+    return this.listingRepository.save(listing);
+  }
 
-    const returnListing = await this.listingRepository.findOne({
-      where: { id: listing.id },
-      relations: ['car', 'photos', 'city'],
+  async findAll(): Promise<Listing[]> {
+    return this.listingRepository.find();
+  }
+
+  async findOneById(id: string): Promise<Listing | null> {
+    return this.listingRepository.findOne({
+      where: { id },
     });
+  }
 
-    if (!returnListing)
-      throw new InternalServerErrorException('Listing not found after save');
-
-    return listing;
+  async findByUserId(userId: string): Promise<Listing[]> {
+    return this.listingRepository.find({ where: { owner: { id: userId } } });
   }
 }

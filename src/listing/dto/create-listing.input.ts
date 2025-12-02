@@ -1,8 +1,9 @@
-import { Field, ID, InputType } from '@nestjs/graphql';
+import { Field, InputType } from '@nestjs/graphql';
 import {
   IsEnum,
+  IsNotEmpty,
   IsOptional,
-  IsUUID,
+  IsString,
   Length,
   Max,
   Min,
@@ -38,7 +39,8 @@ export class CreateListingInput {
   @IsEnum(ListingStatus)
   status: ListingStatus;
 
-  @Field(() => ID)
-  @IsUUID()
-  cityId: string;
+  @Field()
+  @IsString()
+  @IsNotEmpty()
+  location: string;
 }

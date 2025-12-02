@@ -1,51 +1,88 @@
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+  JoinColumn,
+} from 'typeorm';
+import { Field, Float, ID, Int, ObjectType } from '@nestjs/graphql';
+import { CarMake } from '../../car-make/entities/car-make.entity';
+import { CarModel } from '../../car-model/entities/car.model.entity';
 import { BodyType } from '../enums/body-type.enum';
-import { FuelType } from '../enums/fuel-type.enum';
-import { TransmissionType } from '../enums/transmission-type.enum';
 import { DriveType } from '../enums/drive-type.enum';
-import { CarMakeEntity } from '../../car-catalog/car-make/entities/car-make.entity';
-import { CarModelEntity } from '../../car-catalog/car-model/entities/car-model.entity';
-import { CarGenerationEntity } from '../../car-catalog/car-generation/entities/car-generation.entity';
-import { CarModificationEntity } from '../../car-catalog/car-modification/entities/car-modification.entity';
+import { TransmissionType } from '../enums/transmission-type.enum';
+import { FuelType } from '../enums/fuel-type.enum';
 
 @Entity({ name: 'cars' })
-export class CarEntity {
+@ObjectType()
+export class Car {
   @PrimaryGeneratedColumn('uuid')
+  @Field(() => ID)
   id: string;
 
-  @ManyToOne(() => CarMakeEntity)
-  make: CarMakeEntity;
+  @ManyToOne(() => CarMake, { eager: true })
+  @JoinColumn({ name: 'makeId' })
+  @Field(() => CarMake)
+  make: CarMake;
 
-  @ManyToOne(() => CarModelEntity)
-  model: CarModelEntity;
-
-  @ManyToOne(() => CarGenerationEntity)
-  generation: CarGenerationEntity;
-
-  @ManyToOne(() => CarModificationEntity)
-  modification: CarModificationEntity;
-
-  @Column({ type: 'enum', enum: BodyType })
-  bodyType: BodyType;
-
-  @Column({ type: 'enum', enum: FuelType })
-  fuelType: FuelType;
-
-  @Column({ type: 'enum', enum: TransmissionType })
-  transmission: TransmissionType;
-
-  @Column({ type: 'enum', enum: DriveType })
-  driveType: DriveType;
+  @ManyToOne(() => CarModel, { eager: true })
+  @JoinColumn({ name: 'modelId' })
+  @Field(() => CarModel)
+  model: CarModel;
 
   @Column()
-  year: number;
-
-  @Column()
+  @Field(() => Number)
   mileage: number;
 
   @Column()
+  @Field()
   vin: string;
 
   @Column({ nullable: true })
+  @Field(() => Number, { nullable: true })
+  engineVolume?: number;
+
+  @Column({ nullable: true })
+  @Field({ nullable: true })
+  modification?: string;
+
+  @Column()
+  @Field(() => Int)
+  year: number;
+
+  @Column({ type: 'enum', enum: BodyType })
+  @Field(() => BodyType)
+  bodyType: BodyType;
+
+  @Column({ nullable: true })
+  @Field(() => Int, { nullable: true })
+  seats?: number;
+
+  @Column({ nullable: true })
+  @Field(() => Int, { nullable: true })
+  doors?: number;
+
+  @Column({ nullable: true })
+  @Field({ nullable: true })
   color?: string;
+
+  @Column({ type: 'enum', enum: DriveType })
+  @Field(() => DriveType)
+  driveType: DriveType;
+
+  @Column({ type: 'enum', enum: TransmissionType })
+  @Field(() => TransmissionType)
+  transmission: TransmissionType;
+
+  @Column({ type: 'enum', enum: FuelType })
+  @Field(() => FuelType)
+  fuelType: FuelType;
+
+  @Column({ nullable: true })
+  @Field(() => Int, { nullable: true })
+  horsePower?: number;
+
+  @Column({ nullable: true })
+  @Field(() => Float, { nullable: true })
+  fuelConsumption?: number;
 }

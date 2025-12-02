@@ -1,19 +1,18 @@
-import { Module } from '@nestjs/common';
+import { forwardRef, Module } from '@nestjs/common';
 import { ListingService } from './listing.service';
 import { ListingResolver } from './listing.resolver';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { ListingEntity } from './entities/listing.entity';
+import { Listing } from './entities/listing.entity';
 import { AuthModule } from '../auth/auth.module';
 import { CarModule } from '../car/car.module';
-import { LocationModule } from '../location/location.module';
 
 @Module({
   imports: [
-    AuthModule,
-    TypeOrmModule.forFeature([ListingEntity]),
+    forwardRef(() => AuthModule),
+    TypeOrmModule.forFeature([Listing]),
     CarModule,
-    LocationModule,
   ],
   providers: [ListingService, ListingResolver],
+  exports: [ListingService],
 })
 export class ListingModule {}

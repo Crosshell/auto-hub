@@ -11,8 +11,8 @@ import { AuthModule } from './auth/auth.module';
 import { EmailModule } from './email/email.module';
 import { ListingModule } from './listing/listing.module';
 import { CarModule } from './car/car.module';
-import { CarCatalogModule } from './car-catalog/car-catalog.module';
-import { LocationModule } from './location/location.module';
+import { CarModelModule } from './car-model/car-model.module';
+import { CarMakeModule } from './car-make/car-make.module';
 
 @Module({
   imports: [
@@ -35,8 +35,8 @@ import { LocationModule } from './location/location.module';
     EmailModule,
     ListingModule,
     CarModule,
-    CarCatalogModule,
-    LocationModule,
+    CarMakeModule,
+    CarModelModule,
   ],
 })
 export class AppModule {}

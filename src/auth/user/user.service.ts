@@ -7,7 +7,7 @@ import {
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateUserInput } from './dto/create-user.input';
-import { UserEntity } from './entities/user.entity';
+import { User } from './entities/user.entity';
 import { hash, verify } from 'argon2';
 import { UpdateProfileInput } from './dto/update-profile.input';
 import { ChangePasswordInput } from '../registration/change-password.input';
@@ -18,23 +18,25 @@ import { EmailService } from '../../email/email.service';
 @Injectable()
 export class UserService {
   constructor(
-    @InjectRepository(UserEntity)
-    private readonly userRepository: Repository<UserEntity>,
+    @InjectRepository(User)
+    private readonly userRepository: Repository<User>,
     private readonly emailService: EmailService,
     private readonly redis: RedisService,
   ) {}
 
-  async findById(id: string): Promise<UserEntity | null> {
-    return this.userRepository.findOne({ where: { id } });
+  async findOneById(id: string): Promise<User> {
+    const user = await this.userRepository.findOne({ where: { id } });
+    if (!user) throw new NotFoundException('User not found');
+    return user;
   }
 
-  async findByLogin(login: string): Promise<UserEntity | null> {
+  async findByLogin(login: string): Promise<User | null> {
     return this.userRepository.findOne({
       where: [{ username: login }, { email: login }],
     });
   }
 
-  async create(input: CreateUserInput): Promise<UserEntity> {
+  async create(input: CreateUserInput): Promise<User> {
     const { username, email, password } = input;
 
     const existingByUsername = await this.userRepository.findOne({
@@ -64,19 +66,14 @@ export class UserService {
     await this.userRepository.update(id, { isEmailVerified: true });
   }
 
-  async updateProfile(
-    id: string,
-    dto: UpdateProfileInput,
-  ): Promise<UserEntity> {
-    let user = await this.findById(id);
-    if (!user) throw new NotFoundException('User not found');
+  async updateProfile(id: string, dto: UpdateProfileInput): Promise<User> {
+    let user = await this.findOneById(id);
     user = this.userRepository.merge(user, dto);
     return await this.userRepository.save(user);
   }
 
   async changePassword(id: string, dto: ChangePasswordInput): Promise<boolean> {
-    const user = await this.findById(id);
-    if (!user) throw new NotFoundException('User not found');
+    const user = await this.findOneById(id);
 
     const isValid = await verify(user.password, dto.oldPassword);
     if (!isValid) throw new BadRequestException('Invalid password');

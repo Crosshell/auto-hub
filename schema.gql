@@ -15,48 +15,36 @@ enum BodyType {
   VAN
 }
 
-type CarGenerationModel {
+type Car {
+  bodyType: BodyType!
+  color: String
+  doors: Int
+  driveType: DriveType!
+  engineVolume: Float
+  fuelConsumption: Float
+  fuelType: FuelType!
+  horsePower: Int
   id: ID!
-  model: CarModelModel!
-  modifications: [CarModificationModel!]!
-  name: String!
+  make: CarMake!
+  mileage: Float!
+  model: CarModel!
+  modification: String
+  seats: Int
+  transmission: TransmissionType!
+  vin: String!
+  year: Int!
 }
 
-type CarMakeModel {
+type CarMake {
   id: ID!
-  models: [CarModelModel!]!
+  models: [CarModel!]!
   name: String!
 }
 
 type CarModel {
-  bodyType: BodyType!
-  color: String
-  driveType: DriveType!
-  fuelType: FuelType!
-  generation: CarGenerationModel!
   id: ID!
-  make: CarMakeModel!
-  mileage: Float!
-  model: CarModelModel!
-  modification: CarModificationModel!
-  transmission: TransmissionType!
-  vin: String!
-  year: Float!
-}
-
-type CarModelModel {
-  generations: [CarGenerationModel!]!
-  id: ID!
-  make: CarMakeModel!
+  make: CarMake!
   name: String!
-}
-
-type CarModificationModel {
-  description: String
-  engine: String!
-  generation: CarGenerationModel!
-  horsepower: Float!
-  id: ID!
 }
 
 input ChangeEmailInput {
@@ -68,39 +56,29 @@ input ChangePasswordInput {
   oldPassword: String!
 }
 
-type CityModel {
-  id: ID!
-  listings: [ListingModel!]!
-  name: String!
-  region: RegionModel!
-}
-
-type CountryModel {
-  code: String!
-  id: ID!
-  name: String!
-  region: RegionModel!
-}
-
 input CreateCarInput {
   bodyType: BodyType!
   color: String
+  doors: Int
   driveType: DriveType!
+  engineVolume: Float
+  fuelConsumption: Float
   fuelType: FuelType!
-  generationId: ID!
+  horsePower: Int
   makeId: ID!
-  mileage: Float!
+  mileage: Int!
   modelId: ID!
-  modificationId: ID!
+  modification: String
+  seats: Int
   transmission: TransmissionType!
   vin: String!
-  year: Float!
+  year: Int!
 }
 
 input CreateListingInput {
   car: CreateCarInput!
-  cityId: ID!
   description: String
+  location: String!
   price: Float!
   status: ListingStatus! = ACTIVE
   title: String!
@@ -125,25 +103,17 @@ enum FuelType {
   PETROL
 }
 
-type ListingModel {
-  car: CarModel!
-  city: CityModel!
+type Listing {
+  car: Car!
   createdAt: DateTime!
   description: String
   id: ID!
-  owner: UserModel!
-  photos: [ListingPhotoModel!]!
+  location: String!
+  owner: User!
   price: Float!
   status: ListingStatus!
   title: String!
   updatedAt: DateTime!
-}
-
-type ListingPhotoModel {
-  id: ID!
-  listing: ListingModel!
-  order: Float!
-  url: String!
 }
 
 enum ListingStatus {
@@ -160,27 +130,22 @@ input LoginInput {
 type Mutation {
   changeEmail(input: ChangeEmailInput!): Boolean!
   changePassword(input: ChangePasswordInput!): Boolean!
-  createListing(input: CreateListingInput!): ListingModel!
-  login(input: LoginInput!): UserModel!
+  createListing(input: CreateListingInput!): Listing!
+  login(input: LoginInput!): User!
   logout: Boolean!
   register(input: RegisterInput!): Boolean!
-  updateProfile(input: UpdateProfileInput!): UserModel!
+  updateProfile(input: UpdateProfileInput!): User!
   verifyEmail(token: String!): Boolean!
   verifyNewEmail(token: String!): Boolean!
 }
 
 type Query {
-  cities(regionId: String!): [CityModel!]!
-  countries: [CountryModel!]!
-  me: UserModel!
-  regions(countryId: String!): [RegionModel!]!
-}
-
-type RegionModel {
-  cities: [CityModel!]!
-  country: CountryModel!
-  id: ID!
-  name: String!
+  carMakes: [CarMake!]!
+  carModels(makeId: String!): [CarModel!]!
+  listing(id: String!): Listing
+  listings: [Listing!]!
+  me: User!
+  user(id: String!): User!
 }
 
 input RegisterInput {
@@ -202,12 +167,14 @@ input UpdateProfileInput {
   username: String
 }
 
-type UserModel {
+type User {
   avatar: String
   createdAt: DateTime!
   email: String!
   id: ID!
   isEmailVerified: Boolean!
+  listings: [Listing!]!
+  phone: String
   updatedAt: DateTime!
   username: String!
 }

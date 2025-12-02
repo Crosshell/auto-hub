@@ -1,56 +1,59 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { CarEntity } from './entities/car.entity';
-import { CarMakeEntity } from '../car-catalog/car-make/entities/car-make.entity';
-import { CarModelEntity } from '../car-catalog/car-model/entities/car-model.entity';
-import { CarGenerationEntity } from '../car-catalog/car-generation/entities/car-generation.entity';
-import { CarModificationEntity } from '../car-catalog/car-modification/entities/car-modification.entity';
+import { Car } from './entities/car.entity';
+import { CarMake } from '../car-make/entities/car-make.entity';
+import { CarModel } from '../car-model/entities/car.model.entity';
 import { CreateCarInput } from './dto/create-car.input';
 
 @Injectable()
 export class CarService {
   constructor(
-    @InjectRepository(CarEntity)
-    private carRepository: Repository<CarEntity>,
+    @InjectRepository(Car)
+    private carRepository: Repository<Car>,
 
-    @InjectRepository(CarMakeEntity)
-    private makeRepository: Repository<CarMakeEntity>,
+    @InjectRepository(CarMake)
+    private makeRepository: Repository<CarMake>,
 
-    @InjectRepository(CarModelEntity)
-    private modelRepository: Repository<CarModelEntity>,
-
-    @InjectRepository(CarGenerationEntity)
-    private genRepository: Repository<CarGenerationEntity>,
-
-    @InjectRepository(CarModificationEntity)
-    private modRepository: Repository<CarModificationEntity>,
+    @InjectRepository(CarModel)
+    private modelRepository: Repository<CarModel>,
   ) {}
 
-  async create(input: CreateCarInput): Promise<CarEntity> {
-    const make = await this.makeRepository.findOneBy({ id: input.makeId });
-    const model = await this.modelRepository.findOneBy({
-      id: input.modelId,
-    });
-    const gen = await this.genRepository.findOneBy({
-      id: input.generationId,
-    });
-    const mod = await this.modRepository.findOneBy({
-      id: input.modificationId,
+  async create(input: CreateCarInput): Promise<Car> {
+    const make = await this.makeRepository.findOne({
+      where: { id: input.makeId },
+      relations: ['models'],
     });
 
-    if (!make || !model || !gen || !mod) {
-      throw new NotFoundException('Car catalog reference not found');
+    if (!make) throw new NotFoundException('Make not found');
+
+    const model = await this.modelRepository.findOne({
+      where: { id: input.modelId },
+      relations: ['make'],
+    });
+
+    if (!model) throw new NotFoundException('Model not found');
+
+    if (model.make.id !== make.id) {
+      throw new BadRequestException('This model does not belong to this make');
     }
 
     const car = this.carRepository.create({
       ...input,
       make,
       model,
-      generation: gen,
-      modification: mod,
     });
 
     return this.carRepository.save(car);
+  }
+
+  async findOneById(id: string): Promise<Car> {
+    const car = await this.carRepository.findOne({ where: { id } });
+    if (!car) throw new NotFoundException('Car not found');
+    return car;
   }
 }
