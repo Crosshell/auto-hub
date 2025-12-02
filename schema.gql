@@ -169,6 +169,7 @@ input LoginInput {
 }
 
 type Mutation {
+  addFavorite(listingId: String!): Boolean!
   changeEmail(input: ChangeEmailInput!): Boolean!
   changePassword(input: ChangePasswordInput!): Boolean!
   createCarMake(input: CreateCarMakeInput!): CarMake!
@@ -177,9 +178,10 @@ type Mutation {
   deleteCarMake(id: String!): Boolean!
   deleteCarModel(id: String!): Boolean!
   deleteListing(id: String!): Boolean!
-  login(input: LoginInput!): User!
+  login(input: LoginInput!): Boolean!
   logout: Boolean!
   register(input: RegisterInput!): Boolean!
+  removeFavorite(listingId: String!): Boolean!
   updateCarMake(id: String!, input: UpdateCarMakeInput!): CarMake!
   updateCarModel(id: String!, input: UpdateCarModelInput!): CarModel!
   updateListing(id: String!, input: UpdateListingInput!): Listing!
@@ -265,7 +267,8 @@ input UpdateProfileInput {
 type User {
   avatar: String
   createdAt: DateTime!
-  email: String!
+  email: String
+  favoriteListings: [Listing!]
   id: ID!
   isEmailVerified: Boolean!
   listings: [Listing!]!

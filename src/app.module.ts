@@ -3,16 +3,15 @@ import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { RedisModule } from './redis/redis.module';
+import { RedisModule } from './modules/redis/redis.module';
 import { IS_DEV_ENV } from './shared/utils/is-dev.util';
 import { getGraphQLConfig } from './config/graphql.config';
 import { getTypeOrmConfig } from './config/typeorm.config';
-import { AuthModule } from './auth/auth.module';
-import { EmailModule } from './email/email.module';
-import { ListingModule } from './listing/listing.module';
-import { CarModule } from './car/car.module';
-import { CarModelModule } from './car-model/car-model.module';
-import { CarMakeModule } from './car-make/car-make.module';
+import { AuthModule } from './modules/auth/auth.module';
+import { EmailModule } from './modules/email/email.module';
+import { ListingModule } from './modules/listing/listing.module';
+import { CatalogModule } from './modules/catalog/catalog.module';
+import { FavoriteModule } from './modules/favorites/favorites.module';
 
 @Module({
   imports: [
@@ -34,9 +33,8 @@ import { CarMakeModule } from './car-make/car-make.module';
     RedisModule,
     EmailModule,
     ListingModule,
-    CarModule,
-    CarMakeModule,
-    CarModelModule,
+    CatalogModule,
+    FavoriteModule,
   ],
 })
 export class AppModule {}
