@@ -8,6 +8,7 @@ import { CarModel } from './entities/car.model.entity';
 import { Repository } from 'typeorm';
 import { CarMake } from '../car-make/entities/car-make.entity';
 import { CreateCarModelInput } from './dto/create-car-model.input';
+import { UpdateCarModelInput } from './dto/update-car-model.input';
 
 @Injectable()
 export class CarModelService {
@@ -16,11 +17,22 @@ export class CarModelService {
     private readonly carModelRepository: Repository<CarModel>,
   ) {}
 
+  async create(input: CreateCarModelInput): Promise<CarModel> {
+    const carModel = this.carModelRepository.create(input);
+    return this.carModelRepository.save(carModel);
+  }
+
   async createMany(input: CreateCarModelInput[]): Promise<CarModel[]> {
     const carModels = input.map((model) =>
       this.carModelRepository.create(model),
     );
     return this.carModelRepository.save(carModels);
+  }
+
+  async findOneById(id: string): Promise<CarModel> {
+    const carModel = await this.carModelRepository.findOne({ where: { id } });
+    if (!carModel) throw new NotFoundException('Car model not found');
+    return carModel;
   }
 
   async findByCarMakeId(makeId: string): Promise<CarModel[]> {
@@ -37,13 +49,25 @@ export class CarModelService {
     });
 
     if (!model) {
-      throw new NotFoundException('Model not found');
+      throw new NotFoundException('Car model not found');
     }
 
     if (model.make.id !== makeId) {
-      throw new BadRequestException('This model does not belong to this make');
+      throw new BadRequestException(
+        'This car model does not belong to this car make',
+      );
     }
 
     return { model, make: model.make };
+  }
+
+  async update(id: string, input: UpdateCarModelInput): Promise<CarModel> {
+    await this.carModelRepository.update(id, input);
+    return this.findOneById(id);
+  }
+
+  async delete(id: string): Promise<void> {
+    const result = await this.carModelRepository.delete(id);
+    if (!result.affected) throw new NotFoundException('Car model not found');
   }
 }

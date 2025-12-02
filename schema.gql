@@ -81,6 +81,11 @@ input CreateCarMakeInput {
   name: String!
 }
 
+input CreateCarModelInput {
+  makeId: String!
+  name: String!
+}
+
 input CreateListingInput {
   car: CreateCarInput!
   description: String
@@ -141,10 +146,15 @@ type Mutation {
   changeEmail(input: ChangeEmailInput!): Boolean!
   changePassword(input: ChangePasswordInput!): Boolean!
   createCarMake(input: CreateCarMakeInput!): CarMake!
+  createCarModel(input: CreateCarModelInput!): CarModel!
   createListing(input: CreateListingInput!): Listing!
+  deleteCarMake(id: String!): Boolean!
+  deleteCarModel(id: String!): Boolean!
   login(input: LoginInput!): User!
   logout: Boolean!
   register(input: RegisterInput!): Boolean!
+  updateCarMake(id: String!, input: UpdateCarMakeInput!): CarMake!
+  updateCarModel(id: String!, input: UpdateCarModelInput!): CarModel!
   updateListing(id: String!, input: UpdateListingInput!): Listing!
   updateProfile(input: UpdateProfileInput!): User!
   verifyEmail(token: String!): Boolean!
@@ -190,6 +200,14 @@ input UpdateCarInput {
   transmission: TransmissionType
   vin: String
   year: Int
+}
+
+input UpdateCarMakeInput {
+  name: String
+}
+
+input UpdateCarModelInput {
+  name: String!
 }
 
 input UpdateListingInput {

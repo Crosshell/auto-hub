@@ -1,9 +1,18 @@
-import { Args, Parent, Query, ResolveField, Resolver } from '@nestjs/graphql';
+import {
+  Args,
+  Mutation,
+  Parent,
+  Query,
+  ResolveField,
+  Resolver,
+} from '@nestjs/graphql';
 import { CarModelService } from './car-model.service';
 import { CarModel } from './entities/car.model.entity';
 import { ParseUUIDPipe } from '@nestjs/common';
 import { CarMake } from '../car-make/entities/car-make.entity';
 import { CarMakeService } from '../car-make/car-make.service';
+import { UpdateCarModelInput } from './dto/update-car-model.input';
+import { CreateCarModelInput } from './dto/create-car-model.input';
 
 @Resolver(() => CarModel)
 export class CarModelResolver {
@@ -17,6 +26,29 @@ export class CarModelResolver {
     @Args('makeId', ParseUUIDPipe) makeId: string,
   ): Promise<CarModel[]> {
     return this.carModelService.findByCarMakeId(makeId);
+  }
+
+  @Mutation(() => CarModel)
+  async createCarModel(
+    @Args('input') input: CreateCarModelInput,
+  ): Promise<CarModel> {
+    return this.carModelService.create(input);
+  }
+
+  @Mutation(() => CarModel)
+  async updateCarModel(
+    @Args('id', ParseUUIDPipe) id: string,
+    @Args('input') input: UpdateCarModelInput,
+  ): Promise<CarModel> {
+    return this.carModelService.update(id, input);
+  }
+
+  @Mutation(() => Boolean)
+  async deleteCarModel(
+    @Args('id', ParseUUIDPipe) id: string,
+  ): Promise<boolean> {
+    await this.carModelService.delete(id);
+    return true;
   }
 
   @ResolveField(() => CarMake)

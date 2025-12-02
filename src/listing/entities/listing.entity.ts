@@ -28,7 +28,7 @@ export class Listing {
   @Column()
   carId: string;
 
-  @ManyToOne(() => Car, { cascade: true })
+  @ManyToOne(() => Car, { onDelete: 'CASCADE', onUpdate: 'CASCADE' })
   @Field(() => Car)
   car: Car;
 

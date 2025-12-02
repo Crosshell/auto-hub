@@ -14,11 +14,11 @@ export class Car {
   @Field(() => ID)
   id: string;
 
-  @ManyToOne(() => CarMake, { eager: true })
+  @ManyToOne(() => CarMake, { onDelete: 'CASCADE', onUpdate: 'CASCADE' })
   @Field(() => CarMake)
   make: CarMake;
 
-  @ManyToOne(() => CarModel, { eager: true })
+  @ManyToOne(() => CarModel, { onDelete: 'CASCADE', onUpdate: 'CASCADE' })
   @Field(() => CarModel)
   model: CarModel;
 

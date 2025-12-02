@@ -11,6 +11,8 @@ import { CarMake } from './entities/car-make.entity';
 import { CarModel } from '../car-model/entities/car.model.entity';
 import { CarModelService } from '../car-model/car-model.service';
 import { CreateCarMakeInput } from './dto/create-car-make.input';
+import { UpdateCarMakeInput } from './dto/update-car-make.input';
+import { ParseUUIDPipe } from '@nestjs/common';
 
 @Resolver(() => CarMake)
 export class CarMakeResolver {
@@ -29,6 +31,20 @@ export class CarMakeResolver {
     @Args('input') input: CreateCarMakeInput,
   ): Promise<CarMake> {
     return this.carMakeService.create(input);
+  }
+
+  @Mutation(() => CarMake)
+  async updateCarMake(
+    @Args('id', ParseUUIDPipe) id: string,
+    @Args('input') input: UpdateCarMakeInput,
+  ): Promise<CarMake> {
+    return this.carMakeService.update(id, input);
+  }
+
+  @Mutation(() => Boolean)
+  async deleteCarMake(@Args('id', ParseUUIDPipe) id: string): Promise<boolean> {
+    await this.carMakeService.delete(id);
+    return true;
   }
 
   @ResolveField(() => CarModel)

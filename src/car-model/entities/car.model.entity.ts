@@ -1,10 +1,4 @@
-import {
-  Column,
-  Entity,
-  JoinColumn,
-  ManyToOne,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { Field, ID, ObjectType } from '@nestjs/graphql';
 import { CarMake } from '../../car-make/entities/car-make.entity';
 
@@ -23,8 +17,10 @@ export class CarModel {
   @Field()
   makeId: string;
 
-  @ManyToOne(() => CarMake, (make) => make.models, { cascade: true })
-  @JoinColumn({ name: 'makeId' })
+  @ManyToOne(() => CarMake, (make) => make.models, {
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE',
+  })
   @Field(() => CarMake)
   make: CarMake;
 }

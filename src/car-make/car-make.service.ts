@@ -4,6 +4,7 @@ import { CarMake } from './entities/car-make.entity';
 import { Repository } from 'typeorm';
 import { CreateCarMakeInput } from './dto/create-car-make.input';
 import { CarModelService } from '../car-model/car-model.service';
+import { UpdateCarMakeInput } from './dto/update-car-make.input';
 
 @Injectable()
 export class CarMakeService {
@@ -15,6 +16,12 @@ export class CarMakeService {
 
   async findAll(): Promise<CarMake[]> {
     return this.carMakeRepository.find();
+  }
+
+  async findOneById(id: string): Promise<CarMake> {
+    const carMake = await this.carMakeRepository.findOne({ where: { id } });
+    if (!carMake) throw new NotFoundException('Car make not found');
+    return carMake;
   }
 
   async findByCarModelId(id: string): Promise<CarMake> {
@@ -36,5 +43,15 @@ export class CarMakeService {
     await this.carModelService.createMany(createManyModelsInput);
 
     return carMake;
+  }
+
+  async update(id: string, input: UpdateCarMakeInput): Promise<CarMake> {
+    await this.carMakeRepository.update(id, input);
+    return this.findOneById(id);
+  }
+
+  async delete(id: string): Promise<void> {
+    const result = await this.carMakeRepository.delete(id);
+    if (!result.affected) throw new NotFoundException('Car make not found');
   }
 }
