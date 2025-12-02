@@ -14,6 +14,12 @@ export class Car {
   @Field(() => ID)
   id: string;
 
+  @Column()
+  makeId: string;
+
+  @Column()
+  modelId: string;
+
   @ManyToOne(() => CarMake, { onDelete: 'CASCADE', onUpdate: 'CASCADE' })
   @Field(() => CarMake)
   make: CarMake;
@@ -30,7 +36,7 @@ export class Car {
   @Field()
   vin: string;
 
-  @Column({ nullable: true })
+  @Column({ type: 'decimal', precision: 5, scale: 2, nullable: true })
   @Field(() => Number, { nullable: true })
   engineVolume?: number;
 
@@ -74,7 +80,7 @@ export class Car {
   @Field(() => Int, { nullable: true })
   horsePower?: number;
 
-  @Column({ nullable: true })
+  @Column({ type: 'decimal', precision: 5, scale: 2, nullable: true })
   @Field(() => Float, { nullable: true })
   fuelConsumption?: number;
 }

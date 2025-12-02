@@ -1,10 +1,10 @@
 import { registerEnumType } from '@nestjs/graphql';
 
 export enum TransmissionType {
-  MANUAL,
-  AUTOMATIC,
-  CVT,
-  DSG,
+  MANUAL = 'MANUAL',
+  AUTOMATIC = 'AUTOMATIC',
+  CVT = 'CVT',
+  DSG = 'DSG',
 }
 
 registerEnumType(TransmissionType, {

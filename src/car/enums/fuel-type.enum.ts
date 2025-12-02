@@ -1,11 +1,11 @@
 import { registerEnumType } from '@nestjs/graphql';
 
 export enum FuelType {
-  PETROL,
-  DIESEL,
-  HYBRID,
-  ELECTRIC,
-  GASOLINE,
+  PETROL = 'PETROL',
+  DIESEL = 'DIESEL',
+  HYBRID = 'HYBRID',
+  ELECTRIC = 'ELECTRIC',
+  GASOLINE = 'GASOLINE',
 }
 
 registerEnumType(FuelType, {

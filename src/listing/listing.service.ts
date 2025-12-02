@@ -5,6 +5,10 @@ import { Listing } from './entities/listing.entity';
 import { Repository } from 'typeorm';
 import { CarService } from '../car/car.service';
 import { UpdateListingInput } from './dto/update-listing.input';
+import { ListingsFilterInput } from './dto/listings-filter.input';
+import { PaginationInput } from '../shared/dto/pagination.input';
+import { ListingSortInput } from './dto/listings-sort.input';
+import { ListingQueryBuilder } from './listing.query-builder';
 
 @Injectable()
 export class ListingService {
@@ -29,8 +33,18 @@ export class ListingService {
     return this.listingRepository.save(listing);
   }
 
-  async findAll(): Promise<Listing[]> {
-    return this.listingRepository.find();
+  async search(
+    filter: ListingsFilterInput = {},
+    pagination: PaginationInput = { skip: 0, take: 20 },
+    sort?: ListingSortInput,
+  ): Promise<Listing[]> {
+    return await ListingQueryBuilder.base(
+      this.listingRepository.createQueryBuilder('listing'),
+    )
+      .withFilters(filter)
+      .withSorting(sort)
+      .withPagination(pagination)
+      .getMany();
   }
 
   async findOneById(id: string): Promise<Listing | null> {
@@ -61,5 +75,10 @@ export class ListingService {
     });
 
     return this.listingRepository.save(listing);
+  }
+
+  async delete(id: string): Promise<void> {
+    const result = await this.listingRepository.delete(id);
+    if (!result.affected) throw new NotFoundException('Listing not found');
   }
 }

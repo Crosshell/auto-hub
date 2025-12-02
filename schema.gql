@@ -131,10 +131,36 @@ type Listing {
   updatedAt: DateTime!
 }
 
+enum ListingSortField {
+  CREATED_AT
+  PRICE
+  YEAR
+}
+
+input ListingSortInput {
+  field: ListingSortField!
+  order: SortOrder!
+}
+
 enum ListingStatus {
   ACTIVE
   ARCHIVED
   SOLD
+}
+
+input ListingsFilterInput {
+  bodyType: BodyType
+  driveType: DriveType
+  fuelType: FuelType
+  makeId: ID
+  mileageTo: Int
+  modelId: ID
+  priceFrom: Int
+  priceTo: Int
+  title: String
+  transmission: TransmissionType
+  yearFrom: Int
+  yearTo: Int
 }
 
 input LoginInput {
@@ -150,6 +176,7 @@ type Mutation {
   createListing(input: CreateListingInput!): Listing!
   deleteCarMake(id: String!): Boolean!
   deleteCarModel(id: String!): Boolean!
+  deleteListing(id: String!): Boolean!
   login(input: LoginInput!): User!
   logout: Boolean!
   register(input: RegisterInput!): Boolean!
@@ -161,11 +188,16 @@ type Mutation {
   verifyNewEmail(token: String!): Boolean!
 }
 
+input PaginationInput {
+  skip: Int! = 0
+  take: Int! = 20
+}
+
 type Query {
   carMakes: [CarMake!]!
   carModels(makeId: String!): [CarModel!]!
   listing(id: String!): Listing
-  listings: [Listing!]!
+  listings(filter: ListingsFilterInput, pagination: PaginationInput, sort: ListingSortInput): [Listing!]!
   me: User!
   user(id: String!): User!
 }
@@ -174,6 +206,11 @@ input RegisterInput {
   email: String!
   password: String!
   username: String!
+}
+
+enum SortOrder {
+  ASC
+  DESC
 }
 
 enum TransmissionType {

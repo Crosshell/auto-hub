@@ -35,7 +35,7 @@ export class User {
   @Field(() => String, { nullable: true })
   phone?: string;
 
-  @Column({ default: false, name: 'is_email_verified' })
+  @Column({ default: false })
   @Field(() => Boolean)
   isEmailVerified: boolean;
 

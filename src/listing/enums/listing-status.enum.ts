@@ -1,9 +1,9 @@
 import { registerEnumType } from '@nestjs/graphql';
 
 export enum ListingStatus {
-  ACTIVE,
-  SOLD,
-  ARCHIVED,
+  ACTIVE = 'ACTIVE',
+  SOLD = 'SOLD',
+  ARCHIVED = 'ARCHIVED',
 }
 
 registerEnumType(ListingStatus, {

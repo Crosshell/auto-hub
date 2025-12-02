@@ -17,6 +17,9 @@ import { Car } from '../car/entities/car.entity';
 import { CarService } from '../car/car.service';
 import { UpdateListingInput } from './dto/update-listing.input';
 import { ParseUUIDPipe } from '@nestjs/common';
+import { ListingsFilterInput } from './dto/listings-filter.input';
+import { PaginationInput } from '../shared/dto/pagination.input';
+import { ListingSortInput } from './dto/listings-sort.input';
 
 @Resolver(() => Listing)
 export class ListingResolver {
@@ -45,13 +48,23 @@ export class ListingResolver {
   }
 
   @Query(() => [Listing])
-  async listings(): Promise<Listing[]> {
-    return this.listingService.findAll();
+  async listings(
+    @Args('filter', { nullable: true }) filter: ListingsFilterInput,
+    @Args('pagination', { nullable: true }) pagination: PaginationInput,
+    @Args('sort', { nullable: true }) sort: ListingSortInput,
+  ): Promise<Listing[]> {
+    return this.listingService.search(filter, pagination, sort);
   }
 
   @Query(() => Listing, { nullable: true })
   async listing(@Args('id') id: string): Promise<Listing | null> {
     return this.listingService.findOneById(id);
+  }
+
+  @Mutation(() => Boolean)
+  async deleteListing(@Args('id', ParseUUIDPipe) id: string): Promise<boolean> {
+    await this.listingService.delete(id);
+    return true;
   }
 
   @ResolveField(() => User)

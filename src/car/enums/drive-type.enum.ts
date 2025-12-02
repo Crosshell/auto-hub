@@ -1,10 +1,10 @@
 import { registerEnumType } from '@nestjs/graphql';
 
 export enum DriveType {
-  FWD,
-  RWD,
-  AWD,
-  '4WD',
+  FWD = 'FWD',
+  RWD = 'RWD',
+  AWD = 'AWD',
+  '4WD' = '4WD',
 }
 
 registerEnumType(DriveType, {
