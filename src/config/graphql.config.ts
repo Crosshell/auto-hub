@@ -1,6 +1,6 @@
 import { ConfigService } from '@nestjs/config';
 import type { ApolloDriverConfig } from '@nestjs/apollo';
-import { isDev } from '../shared/utils/is-dev.util';
+import { isDev } from '../shared/utils/is-env.util';
 import { join } from 'node:path';
 import { GqlContext } from '../shared/types/gql-context.type';
 

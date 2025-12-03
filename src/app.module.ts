@@ -4,7 +4,7 @@ import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { RedisModule } from './modules/redis/redis.module';
-import { IS_DEV_ENV } from './shared/utils/is-dev.util';
+import { IS_DEV_ENV } from './shared/utils/is-env.util';
 import { getGraphQLConfig } from './config/graphql.config';
 import { getTypeOrmConfig } from './config/typeorm.config';
 import { AuthModule } from './modules/auth/auth.module';

@@ -50,7 +50,13 @@ async function bootstrap() {
 
   app.use(cookieParser(configService.getOrThrow<string>('COOKIES_SECRET')));
 
-  app.useGlobalPipes(new ValidationPipe({ transform: true }));
+  app.useGlobalPipes(
+    new ValidationPipe({
+      transform: true,
+      whitelist: true,
+      forbidNonWhitelisted: true,
+    }),
+  );
 
   const port = configService.getOrThrow<number>('APP_PORT');
   await app.listen(port);
