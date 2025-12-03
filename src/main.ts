@@ -7,6 +7,7 @@ import RedisStore from 'connect-redis';
 import { RedisService } from './modules/redis/redis.service';
 import cookieParser from 'cookie-parser';
 import { parseBoolean } from './shared/utils/parse-boolean.util';
+import { graphqlUploadExpress } from 'graphql-upload-ts';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -18,6 +19,8 @@ async function bootstrap() {
     origin: true,
     credentials: true,
   });
+
+  app.use(graphqlUploadExpress({ maxFileSize: 10000000, maxFiles: 10 }));
 
   app.use(
     session({

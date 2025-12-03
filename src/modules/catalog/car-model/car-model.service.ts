@@ -65,9 +65,4 @@ export class CarModelService {
     await this.carModelRepository.update(id, input);
     return this.findOneById(id);
   }
-
-  async delete(id: string): Promise<void> {
-    const result = await this.carModelRepository.delete(id);
-    if (!result.affected) throw new NotFoundException('Car model not found');
-  }
 }

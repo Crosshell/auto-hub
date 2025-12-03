@@ -21,11 +21,14 @@ import { ListingsFilterInput } from './dto/listings-filter.input';
 import { PaginationInput } from '../../shared/dto/pagination.input';
 import { ListingSortInput } from './dto/listings-sort.input';
 import { ListingOwner } from './decorators/listing-owner.decorator';
+import { ListingPhoto } from './entities/listing-photo.entity';
+import { ListingPhotoService } from './listing-photo.service';
 
 @Resolver(() => Listing)
 export class ListingResolver {
   constructor(
     private readonly listingService: ListingService,
+    private readonly listingPhotoService: ListingPhotoService,
     private readonly userService: UserService,
     private readonly carService: CarService,
   ) {}
@@ -79,5 +82,10 @@ export class ListingResolver {
   @ResolveField(() => Car)
   async car(@Parent() listing: Listing): Promise<Car> {
     return this.carService.findOneById(listing.carId);
+  }
+
+  @ResolveField(() => [ListingPhoto])
+  async photos(@Parent() listing: Listing): Promise<ListingPhoto[]> {
+    return await this.listingPhotoService.findPhotosByListingId(listing.id);
   }
 }

@@ -49,9 +49,4 @@ export class CarMakeService {
     await this.carMakeRepository.update(id, input);
     return this.findOneById(id);
   }
-
-  async delete(id: string): Promise<void> {
-    const result = await this.carMakeRepository.delete(id);
-    if (!result.affected) throw new NotFoundException('Car make not found');
-  }
 }

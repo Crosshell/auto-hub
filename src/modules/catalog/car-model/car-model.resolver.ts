@@ -43,14 +43,6 @@ export class CarModelResolver {
     return this.carModelService.update(id, input);
   }
 
-  @Mutation(() => Boolean)
-  async deleteCarModel(
-    @Args('id', ParseUUIDPipe) id: string,
-  ): Promise<boolean> {
-    await this.carModelService.delete(id);
-    return true;
-  }
-
   @ResolveField(() => CarMake)
   async make(@Parent() model: CarModel): Promise<CarMake> {
     return this.carMakeService.findByCarModelId(model.id);

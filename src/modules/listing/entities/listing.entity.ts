@@ -4,6 +4,7 @@ import {
   Entity,
   JoinColumn,
   ManyToOne,
+  OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
@@ -12,6 +13,7 @@ import { User } from '../../user/entities/user.entity';
 import { Car } from '../../catalog/car/entities/car.entity';
 import { ListingStatus } from '../enums/listing-status.enum';
 import { Field, ID, ObjectType } from '@nestjs/graphql';
+import { ListingPhoto } from './listing-photo.entity';
 
 @Entity({ name: 'listings' })
 @ObjectType()
@@ -54,6 +56,10 @@ export class Listing {
   @Column()
   @Field()
   location: string;
+
+  @OneToMany(() => ListingPhoto, (photo) => photo.listing, { cascade: true })
+  @Field(() => [ListingPhoto])
+  photos: ListingPhoto[];
 
   @CreateDateColumn()
   @Field(() => Date)

@@ -125,10 +125,17 @@ type Listing {
   id: ID!
   location: String!
   owner: User!
+  photos: [ListingPhoto!]!
   price: Float!
   status: ListingStatus!
   title: String!
   updatedAt: DateTime!
+}
+
+type ListingPhoto {
+  createdAt: DateTime!
+  id: ID!
+  url: String!
 }
 
 enum ListingSortField {
@@ -175,9 +182,8 @@ type Mutation {
   createCarMake(input: CreateCarMakeInput!): CarMake!
   createCarModel(input: CreateCarModelInput!): CarModel!
   createListing(input: CreateListingInput!): Listing!
-  deleteCarMake(id: String!): Boolean!
-  deleteCarModel(id: String!): Boolean!
   deleteListing(id: String!): Boolean!
+  deleteListingPhoto(listingId: String!, photoId: String!): Boolean!
   login(input: LoginInput!): Boolean!
   logout: Boolean!
   register(input: RegisterInput!): Boolean!
@@ -186,6 +192,7 @@ type Mutation {
   updateCarModel(id: String!, input: UpdateCarModelInput!): CarModel!
   updateListing(id: String!, input: UpdateListingInput!): Listing!
   updateProfile(input: UpdateProfileInput!): User!
+  uploadListingPhotos(files: [Upload!]!, listingId: String!): [ListingPhoto!]!
   verifyEmail(token: String!): Boolean!
   verifyNewEmail(token: String!): Boolean!
 }
@@ -263,6 +270,9 @@ input UpdateProfileInput {
   phone: String
   username: String
 }
+
+"""The `Upload` scalar type represents a file upload."""
+scalar Upload
 
 type User {
   avatar: String

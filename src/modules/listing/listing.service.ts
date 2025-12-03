@@ -9,6 +9,7 @@ import { ListingsFilterInput } from './dto/listings-filter.input';
 import { PaginationInput } from '../../shared/dto/pagination.input';
 import { ListingSortInput } from './dto/listings-sort.input';
 import { ListingQueryBuilder } from './listing.query-builder';
+import { ListingPhotoService } from './listing-photo.service';
 
 @Injectable()
 export class ListingService {
@@ -16,6 +17,7 @@ export class ListingService {
     @InjectRepository(Listing)
     private readonly listingRepository: Repository<Listing>,
     private readonly carService: CarService,
+    private readonly listingPhotoService: ListingPhotoService,
   ) {}
 
   async create(input: CreateListingInput, userId: string): Promise<Listing> {
@@ -78,6 +80,7 @@ export class ListingService {
   }
 
   async delete(id: string): Promise<void> {
+    await this.listingPhotoService.deleteAllListingPhotos(id);
     const result = await this.listingRepository.delete(id);
     if (!result.affected) throw new NotFoundException('Listing not found');
   }
