@@ -12,12 +12,8 @@ export function getTypeOrmConfig(
     username: configService.getOrThrow<string>('POSTGRES_USER'),
     password: configService.getOrThrow<string>('POSTGRES_PASSWORD'),
     database: configService.getOrThrow<string>('POSTGRES_DB'),
-    entities: [
-      isProd(configService) ? 'dist/**/*.entity.js' : 'src/**/*.entity.ts',
-    ],
-    migrations: [
-      isProd(configService) ? 'dist/migrations/*.js' : 'src/migrations/*.ts',
-    ],
+    autoLoadEntities: true,
+    migrations: [__dirname + '/../migrations/*{.ts,.js}'],
     migrationsRun: isProd(configService),
     synchronize: isDev(configService),
     migrationsTableName: 'migrations',
