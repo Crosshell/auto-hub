@@ -5,6 +5,9 @@ import { ConfigService } from '@nestjs/config';
 @Injectable()
 export class RedisService extends Redis {
   constructor(private readonly configService: ConfigService) {
-    super(configService.getOrThrow<string>('REDIS_URL'));
+    super(configService.getOrThrow<string>('REDIS_URL'), {
+      connectTimeout: 10000,
+      tls: {},
+    });
   }
 }

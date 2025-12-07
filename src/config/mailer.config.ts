@@ -16,7 +16,7 @@ export function getMailerConfig(configService: ConfigService): MailerOptions {
       from: `"AutoHub" <no-reply@gmail.com>`,
     },
     template: {
-      dir: join(process.cwd(), 'src', 'email', 'templates'),
+      dir: join(process.cwd(), 'dist', 'modules', 'email', 'templates'),
       adapter: new HandlebarsAdapter(),
       options: {
         strict: true,
