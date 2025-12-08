@@ -1,11 +1,7 @@
 import { Field, InputType } from '@nestjs/graphql';
-import {
-  ArrayNotEmpty,
-  IsNotEmpty,
-  IsString,
-  ValidateNested,
-} from 'class-validator';
+import { IsArray, IsNotEmpty, IsString, ValidateNested } from 'class-validator';
 import { CreateNestedCarModelInput } from './create-nested-car-model.input';
+import { Type } from 'class-transformer';
 
 @InputType()
 export class CreateCarMakeInput {
@@ -15,7 +11,8 @@ export class CreateCarMakeInput {
   name: string;
 
   @Field(() => [CreateNestedCarModelInput])
+  @IsArray()
   @ValidateNested({ each: true })
-  @ArrayNotEmpty()
+  @Type(() => CreateNestedCarModelInput)
   models: CreateNestedCarModelInput[];
 }

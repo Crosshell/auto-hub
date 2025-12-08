@@ -4,7 +4,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 import { Car } from './entities/car.entity';
 import { CreateCarInput } from './dto/create-car.input';
 import { UpdateCarInput } from './dto/update-car.input';
@@ -64,5 +64,9 @@ export class CarService {
     if (!updatedCar) throw new NotFoundException('Car not found');
 
     return this.carRepository.save(updatedCar);
+  }
+
+  async findManyByIds(ids: readonly string[]): Promise<Car[]> {
+    return this.carRepository.find({ where: { id: In(ids) } });
   }
 }

@@ -12,9 +12,7 @@ import { CreateListingInput } from './dto/create-listing.input';
 import { Listing } from './entities/listing.entity';
 import { ListingService } from './listing.service';
 import { User } from '../user/entities/user.entity';
-import { UserService } from '../user/user.service';
 import { Car } from '../catalog/car/entities/car.entity';
-import { CarService } from '../catalog/car/car.service';
 import { UpdateListingInput } from './dto/update-listing.input';
 import { ParseUUIDPipe } from '@nestjs/common';
 import { ListingsFilterInput } from './dto/listings-filter.input';
@@ -22,15 +20,14 @@ import { PaginationInput } from '../../shared/dto/pagination.input';
 import { ListingSortInput } from './dto/listings-sort.input';
 import { ListingOwner } from './decorators/listing-owner.decorator';
 import { ListingPhoto } from './entities/listing-photo.entity';
-import { ListingPhotoService } from './listing-photo.service';
+import { DataLoaderService } from '../dataloader/dataloader.service';
+import { PaginatedListingsResponse } from './dto/paginated-listings.response';
 
 @Resolver(() => Listing)
 export class ListingResolver {
   constructor(
     private readonly listingService: ListingService,
-    private readonly listingPhotoService: ListingPhotoService,
-    private readonly userService: UserService,
-    private readonly carService: CarService,
+    private readonly dataLoaderService: DataLoaderService,
   ) {}
 
   @Authorization()
@@ -52,12 +49,12 @@ export class ListingResolver {
     return this.listingService.update(id, input);
   }
 
-  @Query(() => [Listing])
+  @Query(() => PaginatedListingsResponse)
   async listings(
     @Args('filter', { nullable: true }) filter: ListingsFilterInput,
     @Args('pagination', { nullable: true }) pagination: PaginationInput,
     @Args('sort', { nullable: true }) sort: ListingSortInput,
-  ): Promise<Listing[]> {
+  ): Promise<PaginatedListingsResponse> {
     return this.listingService.search(filter, pagination, sort);
   }
 
@@ -76,16 +73,16 @@ export class ListingResolver {
 
   @ResolveField(() => User)
   async owner(@Parent() listing: Listing): Promise<User> {
-    return this.userService.findOneByIdOrThrow(listing.ownerId);
+    return this.dataLoaderService.usersLoader.load(listing.ownerId);
   }
 
   @ResolveField(() => Car)
   async car(@Parent() listing: Listing): Promise<Car> {
-    return this.carService.findOneById(listing.carId);
+    return this.dataLoaderService.carsLoader.load(listing.carId);
   }
 
   @ResolveField(() => [ListingPhoto])
   async photos(@Parent() listing: Listing): Promise<ListingPhoto[]> {
-    return await this.listingPhotoService.findPhotosByListingId(listing.id);
+    return await this.dataLoaderService.listingPhotosLoader.load(listing.id);
   }
 }

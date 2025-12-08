@@ -30,68 +30,104 @@ export class ListingQueryBuilder {
   }
 
   withFilters(filter: ListingsFilterInput = {}): this {
-    if (filter.title) {
+    this.filterByTitle(filter.title);
+    this.filterByMake(filter.makeId);
+    this.filterByModel(filter.modelId);
+    this.filterByPrice(filter.priceFrom, filter.priceTo);
+    this.filterByYear(filter.yearFrom, filter.yearTo);
+    this.filterByMileage(filter.mileageTo);
+    this.filterByFuelType(filter.fuelType);
+    this.filterByDriveType(filter.driveType);
+    this.filterByTransmission(filter.transmission);
+    this.filterByBodyType(filter.bodyType);
+    return this;
+  }
+
+  private filterByTitle(title?: string): this {
+    if (title) {
       this.qb.andWhere('listing.title ILIKE :title', {
-        title: `%${filter.title}%`,
+        title: `%${title}%`,
       });
     }
 
-    if (filter.makeId) {
-      this.qb.andWhere('make.id = :makeId', { makeId: filter.makeId });
+    return this;
+  }
+
+  private filterByMake(makeId?: string): this {
+    if (makeId) {
+      this.qb.andWhere('make.id = :makeId', { makeId });
     }
 
-    if (filter.modelId) {
-      this.qb.andWhere('model.id = :modelId', { modelId: filter.modelId });
+    return this;
+  }
+
+  private filterByModel(modelId?: string): this {
+    if (modelId) {
+      this.qb.andWhere('model.id = :modelId', { modelId });
     }
 
-    if (filter.priceFrom) {
-      this.qb.andWhere('listing.price >= :priceFrom', {
-        priceFrom: filter.priceFrom,
-      });
+    return this;
+  }
+
+  private filterByPrice(priceFrom?: number, priceTo?: number): this {
+    if (priceFrom) {
+      this.qb.andWhere('listing.price >= :priceFrom', { priceFrom });
     }
 
-    if (filter.priceTo) {
-      this.qb.andWhere('listing.price <= :priceTo', {
-        priceTo: filter.priceTo,
-      });
+    if (priceTo) {
+      this.qb.andWhere('listing.price <= :priceTo', { priceTo });
     }
 
-    if (filter.yearFrom) {
-      this.qb.andWhere('car.year >= :yearFrom', { yearFrom: filter.yearFrom });
+    return this;
+  }
+
+  private filterByYear(yearFrom?: number, yearTo?: number): this {
+    if (yearFrom) {
+      this.qb.andWhere('car.year >= :yearFrom', { yearFrom });
     }
 
-    if (filter.yearTo) {
-      this.qb.andWhere('car.year <= :yearTo', { yearTo: filter.yearTo });
+    if (yearTo) {
+      this.qb.andWhere('car.year <= :yearTo', { yearTo });
     }
 
-    if (filter.mileageTo) {
-      this.qb.andWhere('car.mileage <= :mileageTo', {
-        mileageTo: filter.mileageTo,
-      });
+    return this;
+  }
+
+  private filterByMileage(mileageTo?: number): this {
+    if (mileageTo) {
+      this.qb.andWhere('car.mileage <= :mileageTo', { mileageTo });
     }
 
-    if (filter.fuelType) {
-      this.qb.andWhere('car.fuelType = :fuelType', {
-        fuelType: filter.fuelType,
-      });
+    return this;
+  }
+
+  private filterByFuelType(fuelType?: string): this {
+    if (fuelType) {
+      this.qb.andWhere('car.fuelType = :fuelType', { fuelType });
     }
 
-    if (filter.driveType) {
-      this.qb.andWhere('car.driveType = :driveType', {
-        driveType: filter.driveType,
-      });
+    return this;
+  }
+
+  private filterByDriveType(driveType?: string): this {
+    if (driveType) {
+      this.qb.andWhere('car.driveType = :driveType', { driveType });
     }
 
-    if (filter.transmission) {
-      this.qb.andWhere('car.transmission = :transmission', {
-        transmission: filter.transmission,
-      });
+    return this;
+  }
+
+  private filterByTransmission(transmission?: string): this {
+    if (transmission) {
+      this.qb.andWhere('car.transmission = :transmission', { transmission });
     }
 
-    if (filter.bodyType) {
-      this.qb.andWhere('car.bodyType = :bodyType', {
-        bodyType: filter.bodyType,
-      });
+    return this;
+  }
+
+  private filterByBodyType(bodyType?: string): this {
+    if (bodyType) {
+      this.qb.andWhere('car.bodyType = :bodyType', { bodyType: bodyType });
     }
 
     return this;
@@ -112,15 +148,7 @@ export class ListingQueryBuilder {
     return this;
   }
 
-  async getMany(): Promise<Listing[]> {
-    return this.qb.getMany();
-  }
-
-  async getCount(): Promise<number> {
-    return this.qb.getCount();
-  }
-
-  getQueryBuilder(): SelectQueryBuilder<Listing> {
-    return this.qb;
+  async getManyAndCount(): Promise<[Listing[], number]> {
+    return this.qb.getManyAndCount();
   }
 }

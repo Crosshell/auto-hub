@@ -197,6 +197,11 @@ type Mutation {
   verifyNewEmail(token: String!): Boolean!
 }
 
+type PaginatedListingsResponse {
+  items: [Listing!]!
+  total: Int!
+}
+
 input PaginationInput {
   skip: Int! = 0
   take: Int! = 20
@@ -206,7 +211,7 @@ type Query {
   carMakes: [CarMake!]!
   carModels(makeId: String!): [CarModel!]!
   listing(id: String!): Listing
-  listings(filter: ListingsFilterInput, pagination: PaginationInput, sort: ListingSortInput): [Listing!]!
+  listings(filter: ListingsFilterInput, pagination: PaginationInput, sort: ListingSortInput): PaginatedListingsResponse!
   me: User!
   user(id: String!): User!
 }

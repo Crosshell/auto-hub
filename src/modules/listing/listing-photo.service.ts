@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ListingPhoto } from './entities/listing-photo.entity';
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 import { FileUpload } from 'graphql-upload-ts';
 import { Readable } from 'stream';
 import { UploadService } from '../upload/upload.service';
@@ -66,10 +66,6 @@ export class ListingPhotoService {
     return true;
   }
 
-  async findPhotosByListingId(listingId: string): Promise<ListingPhoto[]> {
-    return await this.listingPhotoRepository.find({ where: { listingId } });
-  }
-
   async deleteAllListingPhotos(listingId: string): Promise<void> {
     const photos = await this.listingPhotoRepository.find({
       where: { listingId },
@@ -80,5 +76,13 @@ export class ListingPhotoService {
     }
 
     await this.listingPhotoRepository.delete({ listingId });
+  }
+
+  async findManyByListingIds(
+    listingIds: readonly string[],
+  ): Promise<ListingPhoto[]> {
+    return this.listingPhotoRepository.find({
+      where: { listingId: In(listingIds) },
+    });
   }
 }

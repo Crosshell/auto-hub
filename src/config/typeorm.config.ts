@@ -22,6 +22,5 @@ export function getTypeOrmConfig(
           rejectUnauthorized: false,
         }
       : false,
-    logging: isDev(configService),
   };
 }

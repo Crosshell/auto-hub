@@ -4,7 +4,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { DeepPartial, Repository } from 'typeorm';
+import { DeepPartial, In, Repository } from 'typeorm';
 import { CreateUserInput } from './dto/create-user.input';
 import { User } from './entities/user.entity';
 import { hash } from 'argon2';
@@ -70,5 +70,11 @@ export class UserService {
     let user = await this.findOneByIdOrThrow(id);
     user = this.userRepository.merge(user, input);
     return await this.userRepository.save(user);
+  }
+
+  async findManyByIds(ids: readonly string[]): Promise<User[]> {
+    return this.userRepository.find({
+      where: { id: In(ids) },
+    });
   }
 }

@@ -14,6 +14,7 @@ import { CatalogModule } from './modules/catalog/catalog.module';
 import { FavoriteModule } from './modules/favorites/favorites.module';
 import { UploadModule } from './modules/upload/upload.module';
 import { HealthModule } from './modules/health/health.module';
+import { DataLoaderModule } from './modules/dataloader/dataloader.module';
 
 @Module({
   imports: [
@@ -38,6 +39,7 @@ import { HealthModule } from './modules/health/health.module';
     CatalogModule,
     FavoriteModule,
     UploadModule,
+    DataLoaderModule,
     HealthModule,
   ],
 })

@@ -10,6 +10,7 @@ import { PaginationInput } from '../../shared/dto/pagination.input';
 import { ListingSortInput } from './dto/listings-sort.input';
 import { ListingQueryBuilder } from './listing.query-builder';
 import { ListingPhotoService } from './listing-photo.service';
+import { PaginatedListingsResponse } from './dto/paginated-listings.response';
 
 @Injectable()
 export class ListingService {
@@ -39,14 +40,16 @@ export class ListingService {
     filter: ListingsFilterInput = {},
     pagination: PaginationInput = { skip: 0, take: 20 },
     sort?: ListingSortInput,
-  ): Promise<Listing[]> {
-    return await ListingQueryBuilder.base(
+  ): Promise<PaginatedListingsResponse> {
+    const [items, total] = await ListingQueryBuilder.base(
       this.listingRepository.createQueryBuilder('listing'),
     )
       .withFilters(filter)
       .withSorting(sort)
       .withPagination(pagination)
-      .getMany();
+      .getManyAndCount();
+
+    return { items, total };
   }
 
   async findOneById(id: string): Promise<Listing | null> {
