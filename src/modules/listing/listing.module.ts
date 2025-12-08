@@ -1,13 +1,13 @@
 import { forwardRef, Module } from '@nestjs/common';
-import { ListingService } from './listing.service';
-import { ListingResolver } from './listing.resolver';
+import { ListingService } from './services/listing.service';
+import { ListingResolver } from './resolvers/listing.resolver';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Listing } from './entities/listing.entity';
 import { CatalogModule } from '../catalog/catalog.module';
 import { UserModule } from '../user/user.module';
 import { ListingPhoto } from './entities/listing-photo.entity';
-import { ListingPhotoResolver } from './listing-photo.resolver';
-import { ListingPhotoService } from './listing-photo.service';
+import { ListingPhotoResolver } from './resolvers/listing-photo.resolver';
+import { ListingPhotoService } from './services/listing-photo.service';
 
 @Module({
   imports: [

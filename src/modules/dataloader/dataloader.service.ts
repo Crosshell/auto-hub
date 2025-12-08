@@ -3,7 +3,7 @@ import DataLoader from 'dataloader';
 import { User } from '../user/entities/user.entity';
 import { UserService } from '../user/user.service';
 import { ListingPhoto } from '../listing/entities/listing-photo.entity';
-import { ListingPhotoService } from '../listing/listing-photo.service';
+import { ListingPhotoService } from '../listing/services/listing-photo.service';
 import { Car } from '../catalog/car/entities/car.entity';
 import { CarService } from '../catalog/car/car.service';
 

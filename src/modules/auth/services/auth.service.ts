@@ -3,12 +3,12 @@ import {
   ConflictException,
   Injectable,
 } from '@nestjs/common';
-import { RegisterInput } from './dto/register.input';
+import { RegisterInput } from '../dto/register.input';
 import { randomUUID } from 'crypto';
-import { UserService } from '../user/user.service';
-import { EmailService } from '../email/email.service';
-import { RedisService } from '../redis/redis.service';
-import { ChangePasswordInput } from './dto/change-password.input';
+import { UserService } from '../../user/user.service';
+import { EmailService } from '../../email/email.service';
+import { RedisService } from '../../redis/redis.service';
+import { ChangePasswordInput } from '../dto/change-password.input';
 import { hash, verify } from 'argon2';
 
 @Injectable()

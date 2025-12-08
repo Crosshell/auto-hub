@@ -6,22 +6,22 @@ import {
   ResolveField,
   Resolver,
 } from '@nestjs/graphql';
-import { Authorization } from '../auth/decorators/auth.decorator';
-import { CurrentUser } from '../auth/decorators/current-user.decorator';
-import { CreateListingInput } from './dto/create-listing.input';
-import { Listing } from './entities/listing.entity';
-import { ListingService } from './listing.service';
-import { User } from '../user/entities/user.entity';
-import { Car } from '../catalog/car/entities/car.entity';
-import { UpdateListingInput } from './dto/update-listing.input';
+import { Authorization } from '../../auth/decorators/auth.decorator';
+import { CurrentUser } from '../../auth/decorators/current-user.decorator';
+import { CreateListingInput } from '../dto/create-listing.input';
+import { Listing } from '../entities/listing.entity';
+import { ListingService } from '../services/listing.service';
+import { User } from '../../user/entities/user.entity';
+import { Car } from '../../catalog/car/entities/car.entity';
+import { UpdateListingInput } from '../dto/update-listing.input';
 import { ParseUUIDPipe } from '@nestjs/common';
-import { ListingsFilterInput } from './dto/listings-filter.input';
-import { PaginationInput } from '../../shared/dto/pagination.input';
-import { ListingSortInput } from './dto/listings-sort.input';
-import { ListingOwner } from './decorators/listing-owner.decorator';
-import { ListingPhoto } from './entities/listing-photo.entity';
-import { DataLoaderService } from '../dataloader/dataloader.service';
-import { PaginatedListingsResponse } from './dto/paginated-listings.response';
+import { ListingsFilterInput } from '../dto/listings-filter.input';
+import { PaginationInput } from '../../../shared/dto/pagination.input';
+import { ListingSortInput } from '../dto/listings-sort.input';
+import { ListingOwner } from '../decorators/listing-owner.decorator';
+import { ListingPhoto } from '../entities/listing-photo.entity';
+import { DataLoaderService } from '../../dataloader/dataloader.service';
+import { PaginatedListingsResponse } from '../dto/paginated-listings.response';
 
 @Resolver(() => Listing)
 export class ListingResolver {

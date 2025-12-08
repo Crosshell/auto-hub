@@ -1,10 +1,10 @@
-import { ListingPhoto } from './entities/listing-photo.entity';
+import { ListingPhoto } from '../entities/listing-photo.entity';
 import { Args, Mutation, Resolver } from '@nestjs/graphql';
-import { Authorization } from '../auth/decorators/auth.decorator';
-import { ListingOwner } from './decorators/listing-owner.decorator';
+import { Authorization } from '../../auth/decorators/auth.decorator';
+import { ListingOwner } from '../decorators/listing-owner.decorator';
 import { ParseUUIDPipe } from '@nestjs/common';
 import { FileUpload, GraphQLUpload } from 'graphql-upload-ts';
-import { ListingPhotoService } from './listing-photo.service';
+import { ListingPhotoService } from '../services/listing-photo.service';
 
 @Resolver(() => ListingPhoto)
 export class ListingPhotoResolver {

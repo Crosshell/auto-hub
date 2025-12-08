@@ -3,12 +3,12 @@ import {
   InternalServerErrorException,
   UnauthorizedException,
 } from '@nestjs/common';
-import { LoginInput } from './dto/login.input';
-import { User } from '../user/entities/user.entity';
+import { LoginInput } from '../dto/login.input';
+import { User } from '../../user/entities/user.entity';
 import { verify } from 'argon2';
 import type { Request } from 'express';
 import { ConfigService } from '@nestjs/config';
-import { UserService } from '../user/user.service';
+import { UserService } from '../../user/user.service';
 
 @Injectable()
 export class SessionService {

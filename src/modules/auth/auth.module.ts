@@ -1,10 +1,10 @@
 import { Module } from '@nestjs/common';
-import { SessionService } from './session.service';
-import { SessionResolver } from './session.resolver';
+import { SessionService } from './services/session.service';
+import { SessionResolver } from './resolvers/session.resolver';
 import { SessionGuard } from './guards/session.guard';
-import { AuthService } from './auth.service';
+import { AuthService } from './services/auth.service';
 import { UserModule } from '../user/user.module';
-import { AuthResolver } from './auth.resolver';
+import { AuthResolver } from './resolvers/auth.resolver';
 
 @Module({
   imports: [UserModule],

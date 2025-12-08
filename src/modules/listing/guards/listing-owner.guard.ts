@@ -6,7 +6,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { GqlExecutionContext } from '@nestjs/graphql';
-import { ListingService } from '../listing.service';
+import { ListingService } from '../services/listing.service';
 import type { Request } from 'express';
 
 @Injectable()

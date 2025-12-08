@@ -1,16 +1,16 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { CreateListingInput } from './dto/create-listing.input';
+import { CreateListingInput } from '../dto/create-listing.input';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Listing } from './entities/listing.entity';
+import { Listing } from '../entities/listing.entity';
 import { Repository } from 'typeorm';
-import { CarService } from '../catalog/car/car.service';
-import { UpdateListingInput } from './dto/update-listing.input';
-import { ListingsFilterInput } from './dto/listings-filter.input';
-import { PaginationInput } from '../../shared/dto/pagination.input';
-import { ListingSortInput } from './dto/listings-sort.input';
-import { ListingQueryBuilder } from './listing.query-builder';
+import { CarService } from '../../catalog/car/car.service';
+import { UpdateListingInput } from '../dto/update-listing.input';
+import { ListingsFilterInput } from '../dto/listings-filter.input';
+import { PaginationInput } from '../../../shared/dto/pagination.input';
+import { ListingSortInput } from '../dto/listings-sort.input';
+import { ListingQueryBuilder } from '../builders/listing.query.builder';
 import { ListingPhotoService } from './listing-photo.service';
-import { PaginatedListingsResponse } from './dto/paginated-listings.response';
+import { PaginatedListingsResponse } from '../dto/paginated-listings.response';
 
 @Injectable()
 export class ListingService {

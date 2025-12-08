@@ -1,11 +1,11 @@
 import { Args, Mutation, Resolver } from '@nestjs/graphql';
-import { RegisterInput } from './dto/register.input';
-import { AuthService } from './auth.service';
-import { User } from '../user/entities/user.entity';
-import { Authorization } from './decorators/auth.decorator';
-import { CurrentUser } from './decorators/current-user.decorator';
-import { ChangePasswordInput } from './dto/change-password.input';
-import { ChangeEmailInput } from '../user/dto/change-email.input';
+import { RegisterInput } from '../dto/register.input';
+import { AuthService } from '../services/auth.service';
+import { User } from '../../user/entities/user.entity';
+import { Authorization } from '../decorators/auth.decorator';
+import { CurrentUser } from '../decorators/current-user.decorator';
+import { ChangePasswordInput } from '../dto/change-password.input';
+import { ChangeEmailInput } from '../../user/dto/change-email.input';
 
 @Resolver()
 export class AuthResolver {

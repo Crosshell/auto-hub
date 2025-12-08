@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { SelectQueryBuilder } from 'typeorm';
-import { Listing } from './entities/listing.entity';
-import { ListingsFilterInput } from './dto/listings-filter.input';
-import { ListingSortInput } from './dto/listings-sort.input';
-import { PaginationInput } from '../../shared/dto/pagination.input';
-import { ListingSortField } from './enums/listing-sort-field.enum';
+import { Listing } from '../entities/listing.entity';
+import { ListingsFilterInput } from '../dto/listings-filter.input';
+import { ListingSortInput } from '../dto/listings-sort.input';
+import { PaginationInput } from '../../../shared/dto/pagination.input';
+import { ListingSortField } from '../enums/listing-sort-field.enum';
 
 const SORT_FIELD_MAP: Record<ListingSortField, string> = {
   [ListingSortField.PRICE]: 'listing.price',

@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UserFavorite } from './entities/user-favorite.entity';
 import { Repository } from 'typeorm';
-import { ListingService } from '../listing/listing.service';
+import { ListingService } from '../listing/services/listing.service';
 import { Listing } from '../listing/entities/listing.entity';
 
 @Injectable()

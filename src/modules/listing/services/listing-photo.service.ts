@@ -1,11 +1,11 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { ListingPhoto } from './entities/listing-photo.entity';
+import { ListingPhoto } from '../entities/listing-photo.entity';
 import { In, Repository } from 'typeorm';
 import { FileUpload } from 'graphql-upload-ts';
 import { Readable } from 'stream';
-import { UploadService } from '../upload/upload.service';
-import { streamToBuffer } from '../../shared/utils/stream-to-buffer.util';
+import { UploadService } from '../../upload/upload.service';
+import { streamToBuffer } from '../../../shared/utils/stream-to-buffer.util';
 
 @Injectable()
 export class ListingPhotoService {

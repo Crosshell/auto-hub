@@ -12,7 +12,7 @@ import { CurrentUser } from '../auth/decorators/current-user.decorator';
 import { Authorization } from '../auth/decorators/auth.decorator';
 import { UpdateProfileInput } from './dto/update-profile.input';
 import { Listing } from '../listing/entities/listing.entity';
-import { ListingService } from '../listing/listing.service';
+import { ListingService } from '../listing/services/listing.service';
 import { FavoriteService } from '../favorites/favorite.service';
 
 @Resolver(() => User)

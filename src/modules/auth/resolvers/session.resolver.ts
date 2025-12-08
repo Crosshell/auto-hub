@@ -1,8 +1,8 @@
 import { Args, Context, Mutation, Resolver } from '@nestjs/graphql';
-import { SessionService } from './session.service';
-import type { GqlContext } from '../../shared/types/gql-context.type';
-import { LoginInput } from './dto/login.input';
-import { Authorization } from './decorators/auth.decorator';
+import { SessionService } from '../services/session.service';
+import type { GqlContext } from '../../../shared/types/gql-context.type';
+import { LoginInput } from '../dto/login.input';
+import { Authorization } from '../decorators/auth.decorator';
 
 @Resolver()
 export class SessionResolver {
