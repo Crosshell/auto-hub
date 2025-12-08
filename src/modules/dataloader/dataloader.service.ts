@@ -6,6 +6,10 @@ import { ListingPhoto } from '../listing/entities/listing-photo.entity';
 import { ListingPhotoService } from '../listing/services/listing-photo.service';
 import { Car } from '../catalog/car/entities/car.entity';
 import { CarService } from '../catalog/car/car.service';
+import { CarMake } from '../catalog/car-make/entities/car-make.entity';
+import { CarMakeService } from '../catalog/car-make/car-make.service';
+import { CarModel } from '../catalog/car-model/entities/car.model.entity';
+import { CarModelService } from '../catalog/car-model/car-model.service';
 
 @Injectable({ scope: Scope.REQUEST })
 export class DataLoaderService {
@@ -13,6 +17,8 @@ export class DataLoaderService {
     private readonly userService: UserService,
     private readonly listingPhotoService: ListingPhotoService,
     private readonly carService: CarService,
+    private readonly carMakesService: CarMakeService,
+    private readonly carModelsService: CarModelService,
   ) {}
 
   public readonly usersLoader = new DataLoader<string, User>(
@@ -50,6 +56,32 @@ export class DataLoaderService {
 
       const carMap = new Map(cars.map((car) => [car.id, car]));
       return carIds.map((id) => carMap.get(id) || new Error(`Car not found`));
+    },
+  );
+
+  public readonly carMakesLoader = new DataLoader<string, CarMake>(
+    async (carMakeIds: readonly string[]) => {
+      const carMakes = await this.carMakesService.findManyByIds(carMakeIds);
+
+      const carMakesMap = new Map(
+        carMakes.map((carMake) => [carMake.id, carMake]),
+      );
+      return carMakeIds.map(
+        (id) => carMakesMap.get(id) || new Error(`Car make not found`),
+      );
+    },
+  );
+
+  public readonly carModelsLoader = new DataLoader<string, CarModel>(
+    async (carModelIds) => {
+      const carModels = await this.carModelsService.findManyByIds(carModelIds);
+
+      const carModelsMap = new Map(
+        carModels.map((carModel) => [carModel.id, carModel]),
+      );
+      return carModelIds.map(
+        (id) => carModelsMap.get(id) || new Error(`Car model not found`),
+      );
     },
   );
 }

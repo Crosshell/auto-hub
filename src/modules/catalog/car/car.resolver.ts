@@ -2,23 +2,19 @@ import { Parent, ResolveField, Resolver } from '@nestjs/graphql';
 import { Car } from './entities/car.entity';
 import { CarMake } from '../car-make/entities/car-make.entity';
 import { CarModel } from '../car-model/entities/car.model.entity';
-import { CarMakeService } from '../car-make/car-make.service';
-import { CarModelService } from '../car-model/car-model.service';
+import { DataLoaderService } from '../../dataloader/dataloader.service';
 
 @Resolver(() => Car)
 export class CarResolver {
-  constructor(
-    private readonly carMakeService: CarMakeService,
-    private readonly carModelService: CarModelService,
-  ) {}
+  constructor(private readonly dataLoaderService: DataLoaderService) {}
 
   @ResolveField(() => CarMake)
-  async make(@Parent() car: Car) {
-    return this.carMakeService.findOneById(car.makeId);
+  async make(@Parent() car: Car): Promise<CarMake> {
+    return this.dataLoaderService.carMakesLoader.load(car.makeId);
   }
 
   @ResolveField(() => CarModel)
   async model(@Parent() car: Car): Promise<CarModel> {
-    return this.carModelService.findOneById(car.modelId);
+    return this.dataLoaderService.carModelsLoader.load(car.modelId);
   }
 }

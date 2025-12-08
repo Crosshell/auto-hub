@@ -5,7 +5,7 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CarModel } from './entities/car.model.entity';
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 import { CarMake } from '../car-make/entities/car-make.entity';
 import { CreateCarModelInput } from './dto/create-car-model.input';
 import { UpdateCarModelInput } from './dto/update-car-model.input';
@@ -64,5 +64,9 @@ export class CarModelService {
   async update(id: string, input: UpdateCarModelInput): Promise<CarModel> {
     await this.carModelRepository.update(id, input);
     return this.findOneById(id);
+  }
+
+  async findManyByIds(ids: readonly string[]): Promise<CarModel[]> {
+    return this.carModelRepository.find({ where: { id: In(ids) } });
   }
 }

@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CarMake } from './entities/car-make.entity';
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 import { CreateCarMakeInput } from './dto/create-car-make.input';
 import { CarModelService } from '../car-model/car-model.service';
 import { UpdateCarMakeInput } from './dto/update-car-make.input';
@@ -48,5 +48,9 @@ export class CarMakeService {
   async update(id: string, input: UpdateCarMakeInput): Promise<CarMake> {
     await this.carMakeRepository.update(id, input);
     return this.findOneById(id);
+  }
+
+  async findManyByIds(ids: readonly string[]): Promise<CarMake[]> {
+    return this.carMakeRepository.find({ where: { id: In(ids) } });
   }
 }
