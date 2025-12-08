@@ -14,8 +14,7 @@ import { CarModelService } from '../car-model/car-model.service';
 export class CarService {
   constructor(
     @InjectRepository(Car)
-    private carRepository: Repository<Car>,
-
+    private readonly carRepository: Repository<Car>,
     private readonly carModelService: CarModelService,
   ) {}
 

@@ -2,7 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateListingInput } from '../dto/create-listing.input';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Listing } from '../entities/listing.entity';
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 import { CarService } from '../../catalog/car/car.service';
 import { UpdateListingInput } from '../dto/update-listing.input';
 import { ListingsFilterInput } from '../dto/listings-filter.input';
@@ -58,10 +58,6 @@ export class ListingService {
     });
   }
 
-  async findByUserId(userId: string): Promise<Listing[]> {
-    return this.listingRepository.find({ where: { owner: { id: userId } } });
-  }
-
   async update(id: string, input: UpdateListingInput): Promise<Listing> {
     const listing = await this.listingRepository.findOne({
       where: { id },
@@ -86,5 +82,11 @@ export class ListingService {
     await this.listingPhotoService.deleteAllListingPhotos(id);
     const result = await this.listingRepository.delete(id);
     if (!result.affected) throw new NotFoundException('Listing not found');
+  }
+
+  async findByUserIds(userIds: readonly string[]): Promise<Listing[]> {
+    return this.listingRepository.find({
+      where: { owner: { id: In(userIds) } },
+    });
   }
 }

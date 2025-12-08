@@ -69,4 +69,10 @@ export class CarModelService {
   async findManyByIds(ids: readonly string[]): Promise<CarModel[]> {
     return this.carModelRepository.find({ where: { id: In(ids) } });
   }
+
+  async findManyByMakeIds(makeIds: readonly string[]): Promise<CarModel[]> {
+    return this.carModelRepository.find({
+      where: { make: { id: In(makeIds) } },
+    });
+  }
 }

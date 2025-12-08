@@ -9,16 +9,16 @@ import {
 import { CarMakeService } from './car-make.service';
 import { CarMake } from './entities/car-make.entity';
 import { CarModel } from '../car-model/entities/car.model.entity';
-import { CarModelService } from '../car-model/car-model.service';
 import { CreateCarMakeInput } from './dto/create-car-make.input';
 import { UpdateCarMakeInput } from './dto/update-car-make.input';
 import { ParseUUIDPipe } from '@nestjs/common';
+import { DataLoaderService } from '../../dataloader/dataloader.service';
 
 @Resolver(() => CarMake)
 export class CarMakeResolver {
   constructor(
     private readonly carMakeService: CarMakeService,
-    private readonly carModelService: CarModelService,
+    private readonly dataLoaderService: DataLoaderService,
   ) {}
 
   @Query(() => [CarMake])
@@ -43,6 +43,6 @@ export class CarMakeResolver {
 
   @ResolveField(() => [CarModel])
   async models(@Parent() carMake: CarMake): Promise<CarModel[]> {
-    return this.carModelService.findByCarMakeId(carMake.id);
+    return this.dataLoaderService.carModelsByMakeIdLoader.load(carMake.id);
   }
 }

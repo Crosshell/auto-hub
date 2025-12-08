@@ -9,8 +9,8 @@ import { Listing } from '../listing/entities/listing.entity';
 export class FavoriteService {
   constructor(
     @InjectRepository(UserFavorite)
-    private userFavoriteRepository: Repository<UserFavorite>,
-    private listingService: ListingService,
+    private readonly userFavoriteRepository: Repository<UserFavorite>,
+    private readonly listingService: ListingService,
   ) {}
 
   async add(userId: string, listingId: string): Promise<boolean> {

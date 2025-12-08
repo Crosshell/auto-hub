@@ -10,11 +10,14 @@ import { CarMake } from '../catalog/car-make/entities/car-make.entity';
 import { CarMakeService } from '../catalog/car-make/car-make.service';
 import { CarModel } from '../catalog/car-model/entities/car.model.entity';
 import { CarModelService } from '../catalog/car-model/car-model.service';
+import { Listing } from '../listing/entities/listing.entity';
+import { ListingService } from '../listing/services/listing.service';
 
 @Injectable({ scope: Scope.REQUEST })
 export class DataLoaderService {
   constructor(
     private readonly userService: UserService,
+    private readonly listingService: ListingService,
     private readonly listingPhotoService: ListingPhotoService,
     private readonly carService: CarService,
     private readonly carMakesService: CarMakeService,
@@ -32,23 +35,23 @@ export class DataLoaderService {
     },
   );
 
-  public readonly listingPhotosLoader = new DataLoader<string, ListingPhoto[]>(
-    async (listingIds: readonly string[]) => {
-      const photos =
-        await this.listingPhotoService.findManyByListingIds(listingIds);
+  public readonly listingPhotosByListingIdLoader = new DataLoader<
+    string,
+    ListingPhoto[]
+  >(async (listingIds: readonly string[]) => {
+    const photos =
+      await this.listingPhotoService.findManyByListingIds(listingIds);
 
-      const photosMap = new Map<string, ListingPhoto[]>();
+    const photosMap = new Map<string, ListingPhoto[]>();
 
-      photos.forEach((photo) => {
-        if (!photosMap.has(photo.listingId)) {
-          photosMap.set(photo.listingId, []);
-        }
-        photosMap.get(photo.listingId)?.push(photo);
-      });
+    photos.forEach((photo) => {
+      const group = photosMap.get(photo.listingId) || [];
+      group.push(photo);
+      photosMap.set(photo.listingId, group);
+    });
 
-      return listingIds.map((id) => photosMap.get(id) || []);
-    },
-  );
+    return listingIds.map((id) => photosMap.get(id) || []);
+  });
 
   public readonly carsLoader = new DataLoader<string, Car>(
     async (carIds: readonly string[]) => {
@@ -73,7 +76,7 @@ export class DataLoaderService {
   );
 
   public readonly carModelsLoader = new DataLoader<string, CarModel>(
-    async (carModelIds) => {
+    async (carModelIds: readonly string[]) => {
       const carModels = await this.carModelsService.findManyByIds(carModelIds);
 
       const carModelsMap = new Map(
@@ -82,6 +85,39 @@ export class DataLoaderService {
       return carModelIds.map(
         (id) => carModelsMap.get(id) || new Error(`Car model not found`),
       );
+    },
+  );
+
+  public readonly carModelsByMakeIdLoader = new DataLoader<string, CarModel[]>(
+    async (carMakeIds: readonly string[]) => {
+      const carModels =
+        await this.carModelsService.findManyByMakeIds(carMakeIds);
+
+      const modelsMap = new Map<string, CarModel[]>();
+
+      carModels.forEach((model) => {
+        const group = modelsMap.get(model.makeId) || [];
+        group.push(model);
+        modelsMap.set(model.makeId, group);
+      });
+
+      return carMakeIds.map((id) => modelsMap.get(id) || []);
+    },
+  );
+
+  public readonly listingsByUserIdLoader = new DataLoader<string, Listing[]>(
+    async (userIds: readonly string[]) => {
+      const listings = await this.listingService.findByUserIds(userIds);
+
+      const listingsMap = new Map<string, Listing[]>();
+
+      listings.forEach((listing) => {
+        const group = listingsMap.get(listing.ownerId) || [];
+        group.push(listing);
+        listingsMap.set(listing.ownerId, group);
+      });
+
+      return userIds.map((id) => listingsMap.get(id) || []);
     },
   );
 }

@@ -20,6 +20,6 @@ import { CarModelService } from './car-model/car-model.service';
     CarModelResolver,
     CarModelService,
   ],
-  exports: [CarService],
+  exports: [CarService, CarMakeService, CarModelService],
 })
 export class CatalogModule {}

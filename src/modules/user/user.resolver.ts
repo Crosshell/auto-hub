@@ -12,15 +12,15 @@ import { CurrentUser } from '../auth/decorators/current-user.decorator';
 import { Authorization } from '../auth/decorators/auth.decorator';
 import { UpdateProfileInput } from './dto/update-profile.input';
 import { Listing } from '../listing/entities/listing.entity';
-import { ListingService } from '../listing/services/listing.service';
 import { FavoriteService } from '../favorites/favorite.service';
+import { DataLoaderService } from '../dataloader/dataloader.service';
 
 @Resolver(() => User)
 export class UserResolver {
   constructor(
     private readonly userService: UserService,
-    private readonly listingService: ListingService,
     private readonly favoriteService: FavoriteService,
+    private readonly dataLoaderService: DataLoaderService,
   ) {}
 
   @Authorization()
@@ -45,16 +45,19 @@ export class UserResolver {
 
   @ResolveField(() => [Listing])
   async listings(@Parent() user: User): Promise<Listing[]> {
-    return this.listingService.findByUserId(user.id);
+    return this.dataLoaderService.listingsByUserIdLoader.load(user.id);
   }
 
   @ResolveField(() => String, { nullable: true })
-  email(@Parent() user: User, @CurrentUser() me: User) {
+  email(@Parent() user: User, @CurrentUser() me: User): string | null {
     return me?.id === user.id ? user.email : null;
   }
 
   @ResolveField(() => [Listing], { nullable: true })
-  async favoriteListings(@Parent() user: User, @CurrentUser() me: User) {
+  async favoriteListings(
+    @Parent() user: User,
+    @CurrentUser() me: User,
+  ): Promise<Listing[] | null> {
     if (me?.id !== user.id) return null;
     return this.favoriteService.getUserFavorites(user.id);
   }

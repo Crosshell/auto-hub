@@ -24,14 +24,6 @@ export class CarMakeService {
     return carMake;
   }
 
-  async findByCarModelId(id: string): Promise<CarMake> {
-    const carMake = await this.carMakeRepository.findOne({
-      where: { models: { id } },
-    });
-    if (!carMake) throw new NotFoundException('Car make not found');
-    return carMake;
-  }
-
   async create(input: CreateCarMakeInput): Promise<CarMake> {
     const carMake = this.carMakeRepository.create({ name: input.name });
     await this.carMakeRepository.save(carMake);

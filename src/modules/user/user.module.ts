@@ -1,4 +1,4 @@
-import { forwardRef, Module } from '@nestjs/common';
+import { Module } from '@nestjs/common';
 import { UserResolver } from './user.resolver';
 import { UserService } from './user.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -8,11 +8,7 @@ import { ListingModule } from '../listing/listing.module';
 import { FavoriteModule } from '../favorites/favorites.module';
 
 @Module({
-  imports: [
-    TypeOrmModule.forFeature([User]),
-    forwardRef(() => ListingModule),
-    forwardRef(() => FavoriteModule),
-  ],
+  imports: [TypeOrmModule.forFeature([User]), ListingModule, FavoriteModule],
   providers: [UserResolver, UserService, SessionGuard],
   exports: [UserService],
 })

@@ -83,6 +83,8 @@ export class ListingResolver {
 
   @ResolveField(() => [ListingPhoto])
   async photos(@Parent() listing: Listing): Promise<ListingPhoto[]> {
-    return await this.dataLoaderService.listingPhotosLoader.load(listing.id);
+    return await this.dataLoaderService.listingPhotosByListingIdLoader.load(
+      listing.id,
+    );
   }
 }

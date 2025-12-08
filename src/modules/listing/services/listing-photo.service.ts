@@ -15,7 +15,10 @@ export class ListingPhotoService {
     private readonly uploadService: UploadService,
   ) {}
 
-  async uploadListingPhotos(listingId: string, files: Promise<FileUpload>[]) {
+  async uploadListingPhotos(
+    listingId: string,
+    files: Promise<FileUpload>[],
+  ): Promise<ListingPhoto[]> {
     const uploads = await Promise.all(files);
 
     const result: ListingPhoto[] = [];
@@ -28,7 +31,10 @@ export class ListingPhotoService {
     return result;
   }
 
-  async uploadListingPhoto(listingId: string, file: FileUpload) {
+  async uploadListingPhoto(
+    listingId: string,
+    file: FileUpload,
+  ): Promise<ListingPhoto> {
     const stream: Readable = file.createReadStream();
     const buffer = await streamToBuffer(stream);
 
